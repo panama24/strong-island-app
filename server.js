@@ -25,7 +25,6 @@ const typeDefs = gql`
     username: String
     email: String
     password: String
-    jwt: String
   }
 
   type Query {

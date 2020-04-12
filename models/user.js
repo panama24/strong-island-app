@@ -27,10 +27,6 @@ const userSchema = new Schema({
     required: true,
     minLength: 7,
   },
-  jwt: {
-    type: String,
-    required: false,
-  }
 });
 
 userSchema.statics.findUser = async (id) => {
@@ -53,7 +49,7 @@ userSchema.statics.signupUser = async ({ email, password, username }) => {
 
   const user = await User.findOne({ email });
 
-  user.jwt = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+  jwt.sign({ _id: user._id }, process.env.JWT_KEY);
 
   await user.save();
 
