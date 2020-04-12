@@ -75,6 +75,18 @@ userSchema.statics.loginUser = async (email, password) => {
   };
 };
 
+userSchema.statics.logoutUser = async (email) => {
+  const user = await User.findOne({ email });
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return {
+    token: null,
+    user
+  };
+};
+
 const User = mongoose.model('User', userSchema);
 
 module.exports = { User };

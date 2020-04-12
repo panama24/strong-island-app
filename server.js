@@ -34,6 +34,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(username: String!, email: String!, password: String!): LoginResponse!
+    logout(email: String!): User!
     signup(username: String!, email: String!, password: String!): User!
   }
 
@@ -60,6 +61,10 @@ const resolvers = {
       const user = await User.loginUser(email, password);
       return user;
     },
+    logout: async (_, { email }, context) => {
+      const { user } = await User.logoutUser(email);
+      return user;
+    },
     signup: async (_, args) => {
       const user = await User.signupUser(args);
       return user;
@@ -79,11 +84,11 @@ const getUser = token => {
 };
 
 const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
-  const tokenWithBearer = req.headers.authorization || '';
-  const token = tokenWithBearer.split(' ')[1];
-  const user = getUser(token);
+    const tokenWithBearer = req.headers.authorization || '';
+    const token = tokenWithBearer.split(' ')[1];
+    const user = getUser(token);
 
-  return { user };
+    return { user };
   },
 });
 
