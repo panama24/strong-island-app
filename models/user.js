@@ -33,6 +33,11 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.statics.findUser = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
+
 userSchema.statics.signupUser = async ({ email, password, username }) => {
   const existingUser = await User.findOne({ email });
   if (existingUser) {
@@ -66,11 +71,12 @@ userSchema.statics.loginUser = async (email, password) => {
     throw new Error('Invalid Password');
   }
 
-  user.jwt = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
 
-  await user.save();
-
-  return user;
+  return {
+    token,
+    user
+  };
 };
 
 const User = mongoose.model('User', userSchema);

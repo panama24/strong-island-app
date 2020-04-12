@@ -1,7 +1,9 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const cors = require('cors');
 const path = require('path')
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const { ApolloServer, gql } = require('apollo-server-express');
 const port = process.env.PORT || 8000;
 
@@ -32,20 +34,30 @@ const typeDefs = gql`
   }
 
   type Mutation {
-    login(username: String!, email: String!, password: String!): User
-    signup(username: String!, email: String!, password: String!): User
+    login(username: String!, email: String!, password: String!): LoginResponse!
+    signup(username: String!, email: String!, password: String!): User!
+  }
+
+  type LoginResponse {
+    token: String
+    user: User
   }
 `;
 
 const resolvers = {
   Query: {
-    currentUser: () => {
-      return TEMP_USER;
+    currentUser: async (_, args, { user }) => {
+      if (!user) {
+        throw new Error('Not authenticated');
+      }
+      const currentUser = await User.findUser(user._id);
+
+      return currentUser;
     },
     getUsers: async () => await User.find({}).exec()
   },
   Mutation: {
-    login: async (_, { email, password }) => {
+    login: async (_, { email, password }, context) => {
       const user = await User.loginUser(email, password);
       return user;
     },
@@ -56,10 +68,30 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const getUser = token => {
+  try {
+    if (token) {
+      return jwt.verify(token, process.env.JWT_KEY);
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
+const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
+  const tokenWithBearer = req.headers.authorization || '';
+  const token = tokenWithBearer.split(' ')[1];
+  const user = getUser(token);
+
+  return { user };
+  },
+});
+
 const app = express();
 
 app.use(express.json());
+app.use(bodyParser.json());
 app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client", "build")))
