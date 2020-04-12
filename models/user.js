@@ -3,8 +3,10 @@ const validator = require('validator');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const userSchema = mongoose.Schema({
-  name: {
+const { Schema } = mongoose;
+
+const userSchema = new Schema({
+  username: {
     type: String,
     required: true,
     trim: true,
@@ -25,48 +27,52 @@ const userSchema = mongoose.Schema({
     required: true,
     minLength: 7,
   },
-  tokens: [{
-    token: {
-      type: String,
-      required: true,
-    },
-  }],
+  jwt: {
+    type: String,
+    required: false,
+  }
 });
 
-userSchema.pre('save', async (next) => {
-  const user = this;
-  if (user.isModified('password')) {
-    user.password = await bcrypt.hash(user.password, 8);
+userSchema.statics.signupUser = async ({ email, password, username }) => {
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    throw new Error('Email already taken');
   }
 
-  next();
-});
+  const hash = await bcrypt.hash(password, 8);
+  await User.create({
+    email,
+    password: hash,
+    username,
+  });
 
-userSchema.methods.generateAuthToken = async () => {
-  const user = this;
-  const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+  const user = await User.findOne({ email });
 
-  user.tokens = user.tokens.concat({ token });
+  user.jwt = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
 
   await user.save();
 
-  return token;
+  return user;
 };
 
-userSchema.statics.findByCredentials = async (email, password) => {
+userSchema.statics.loginUser = async (email, password) => {
   const user = await User.findOne({ email });
   if (!user) {
-    throw new Error({ error: 'Invalid login credentials' });
+    throw new Error('Email not found');
   }
 
-  const isPasswordMatch = await bcrypt.compare(password, user.password);
-  if (!isPasswordMatch) {
-    throw new Error({ error: 'Invalid login credentials' });
+  const isValidPassword = await bcrypt.compare(password, user.password);
+  if (!isValidPassword) {
+    throw new Error('Invalid Password');
   }
+
+  user.jwt = jwt.sign({ _id: user._id }, process.env.JWT_KEY);
+
+  await user.save();
 
   return user;
 };
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;
+module.exports = { User };
