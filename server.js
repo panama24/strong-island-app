@@ -4,7 +4,7 @@ const cors = require('cors');
 const path = require('path')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
-const { ApolloServer, gql } = require('apollo-server-express');
+const { ApolloServer, AuthenticationError, gql } = require('apollo-server-express');
 const port = process.env.PORT || 8000;
 
 require('./db/mongoose');
@@ -30,6 +30,7 @@ const typeDefs = gql`
   type Query {
     currentUser: User
     getUsers: [User]
+    getUser(token: String): User
   }
 
   type Mutation {
@@ -46,7 +47,7 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    currentUser: async (_, args, { user }) => {
+    getUser: async (_, args, { user }) => {
       if (!user) {
         throw new Error('Not authenticated');
       }
@@ -54,51 +55,67 @@ const resolvers = {
 
       return currentUser;
     },
-    getUsers: async () => await User.find({}).exec()
+    getUsers: async () => await User.find({}).exec(),
+    /*getUser: async (_, { token }, { user }) => {
+      if (!token) {
+        return null;
+      }
+
+      jwt.verify(token, process.env.JWT_KEY);
+
+      const loggedInUser = await User.findUser(user._id);
+      console.log(user, loggedInUser)
+      //return loggedInUser;
+      return TEMP_USER
+    }*/
   },
   Mutation: {
-    login: async (_, { email, password }, context) => {
+    login: async (root, { email, password }, context) => {
+      console.log('EMAIL:', email);
       const user = await User.loginUser(email, password);
       return user;
     },
-    logout: async (_, { email }, context) => {
+    logout: async (root, { email }, context) => {
       const { user } = await User.logoutUser(email);
       return user;
     },
-    signup: async (_, args) => {
+    signup: async (root, args) => {
       const user = await User.signupUser(args);
       return user;
     }
   }
 };
 
-const getUser = token => {
-  try {
-    if (token) {
-      return jwt.verify(token, process.env.JWT_KEY);
+const getMe = async (token) => {
+  if (token) {
+    try {
+      return await jwt.verify(token, process.env.JWT_KEY);
+    } catch (e) {
+      // throw new AuthenticationError('Your session expired. Sign in again.');
+      return null;
     }
-    return null;
-  } catch (e) {
-    return null;
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers, context: ({ req }) => {
-    const tokenWithBearer = req.headers.authorization || '';
-    const token = tokenWithBearer.split(' ')[1];
-    const user = getUser(token);
+const server = new ApolloServer({ typeDefs, resolvers, context: async ({ req }) => {
+    if (req) {
+      const token = req.headers.authorization || '';
+      const user = await getMe(token);
+      console.log('getMe:', user);
 
-    return { user };
+      return { user };
+    }
   },
 });
 
 const app = express();
 
+app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json());
-app.use(cors());
 
 app.use(express.static(path.join(__dirname, "client", "build")))
+
 
 server.applyMiddleware({ app });
 
