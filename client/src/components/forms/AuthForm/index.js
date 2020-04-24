@@ -7,14 +7,6 @@ const AUTHFORM = {
   Signup: "signup",
 };
 
-/*
-state = {
-  email: { error: '', value: ''},
-  password: { error: '', value: ''},
-  username: { error: '', value: ''},
-}
-*/
-
 const formatValues = (state) =>
   Object.keys(state).map((k) => ({
     [k]: state[k].value,
@@ -22,7 +14,7 @@ const formatValues = (state) =>
 
 const errorStyle = {
   color: "red",
-  fontSize: "13px",
+  fontSize: "11px",
 };
 
 const AuthForm = ({ mutation, title }) => {
@@ -32,6 +24,9 @@ const AuthForm = ({ mutation, title }) => {
     onSubmitCB
   );
 
+  const passwordHint =
+    "Must be 8-15 characters and contain one uppercase and one lowercase letter, one number and one special character.";
+
   return (
     <div>
       <h2>{title}</h2>
@@ -40,7 +35,7 @@ const AuthForm = ({ mutation, title }) => {
         <input
           type="text"
           name="username"
-          onChange={onChangeHandler}
+          onChange={(e) => onChangeHandler(e)}
           value={state.username.value}
         />
         {state.username.error && (
@@ -50,8 +45,9 @@ const AuthForm = ({ mutation, title }) => {
         <input
           type="text"
           name="email"
-          onChange={onChangeHandler}
+          onChange={(e) => onChangeHandler(e)}
           value={state.email.value}
+          placeholder="example@example.com"
         />
         {state.email.error && (
           <span style={errorStyle}>{state.email.error}</span>
@@ -60,9 +56,11 @@ const AuthForm = ({ mutation, title }) => {
         <input
           type="text"
           name="password"
-          onChange={onChangeHandler}
+          onChange={(e) => onChangeHandler(e)}
           value={state.password.value}
+          placeholder="Hello123!"
         />
+        <span>{passwordHint}</span>
         {state.password.error && (
           <span style={errorStyle}>{state.password.error}</span>
         )}

@@ -1,61 +1,50 @@
+import { isValidEmail, isValidPassword } from "../validators";
+
 const loginSchema = {
   email: {
     error: "",
+    errorMsg: "Invalid email format.",
     required: true,
-    validator: {
-      regEx: /^\S+@\S+\.\S+$/,
-      error: "Invalid email format",
-    },
+    validators: [isValidEmail],
     value: "",
   },
   password: {
     error: "",
+    errorMsg: "Invalid password format.",
     required: true,
     regEx: "",
-    validator: {
-      regEx: /^[a-zA-Z]+$/,
-      error: "Invalid password format",
-    },
+    validators: [isValidPassword],
     value: "",
   },
   username: {
     error: "",
+    errorMsg: "Invalid username format.",
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z]+$/,
-      error: "Invalid username format",
-    },
+    validators: [],
     value: "",
   },
 };
 
-// validators: [isEmail, maxLength, minLength, alphanumeric];
 const signupSchema = {
   email: {
     error: "",
+    errorMsg: "Invalid email format.",
     required: true,
-    validator: {
-      regEx: /^\S+@\S+\.\S+$/,
-      error: "Invalid email format",
-    },
+    validators: [isValidEmail],
     value: "",
   },
   password: {
     error: "",
+    errorMsg: "Invalid password format.",
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z]+$/,
-      error: "Invalid password format",
-    },
+    validators: [isValidPassword],
     value: "",
   },
   username: {
     error: "",
+    errorMsg: "Invalid username format.",
     required: true,
-    validator: {
-      regEx: /^[a-zA-Z]+$/,
-      error: "Invalid username format",
-    },
+    validators: [],
     value: "",
   },
 };

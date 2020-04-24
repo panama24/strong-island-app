@@ -37,20 +37,16 @@ const useForm = (formSchema = {}, cb) => {
 
       const name = event.target.name;
       const value = event.target.value;
+      const fieldName = formSchema[name];
 
       let error = "";
-      if (formSchema[name].required) {
-        if (!value) {
-          error = "This field is required.";
-        }
+      if (fieldName.required && !value) {
+        error = "This field is required.";
       }
 
-      if (
-        formSchema[name].validator !== null &&
-        typeof formSchema[name].validator === "object"
-      ) {
-        if (value && !formSchema[name].validator.regEx.test(value)) {
-          error = formSchema[name].validator.error;
+      if (fieldName.validators.length > 0) {
+        if (fieldName.validators.some((v) => !v(value))) {
+          error = fieldName.errorMsg;
         }
       }
 
