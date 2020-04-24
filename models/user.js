@@ -17,8 +17,6 @@ const userSchema = new Schema({
     unique: true,
     lowercase: true,
     validate: value => {
-      console.log('VALUE:', value);
-      console.log('isEmail:', isEmail(value));
       if (!validator.isEmail(value)) {
         throw new Error({ error: 'Invalid email' });
       }
@@ -77,16 +75,13 @@ userSchema.statics.loginUser = async (email, password) => {
   };
 };
 
-userSchema.statics.logoutUser = async (email) => {
-  const user = await User.findOne({ email });
-  if (!user) {
+userSchema.statics.logoutUser = async (user) => {
+  const loggedOutUser = await User.findById(user._id);
+  if (!loggedOutUser) {
     throw new Error('User not found');
   }
 
-  return {
-    token: null,
-    user
-  };
+  return { loggedOutUser };
 };
 
 const User = mongoose.model('User', userSchema);

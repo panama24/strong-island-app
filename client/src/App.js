@@ -17,6 +17,7 @@ const AuthForm = ({ onSubmit }) => {
   const onSubmitHandler = (e) => {
     e.preventDefault();
     onSubmit({ variables: values })
+    setValues(initialValues);
   };
 
   return (
@@ -47,7 +48,15 @@ const AuthForm = ({ onSubmit }) => {
   );
 };
 
-const AuthenticatedApp = () => <>AuthenticatedApp </>
+const AuthenticatedApp = () => {
+  const { logout } = useAuth();
+  return (
+    <div>
+      AuthenticatedApp
+      <button onClick={() => logout()}>Logout</button>
+    </div>
+  );
+};
 
 const UnauthenticatedApp = () => {
   const { login, signup } = useAuth();

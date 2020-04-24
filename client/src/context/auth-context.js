@@ -3,7 +3,7 @@ import { withApollo } from 'react-apollo';
 import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
 import * as authClient from '../utils/auth-client';
-import { getToken, handleLoginResponse } from '../utils/auth';
+import { getToken, handleLoginResponse, handleLogoutResponse } from '../utils/auth';
 import { useAsync } from '../utils/use-async';
 import { useBootstrapAppData } from '../utils/bootstrap';
 
@@ -23,10 +23,22 @@ const LOGIN_MUTATION = gql`
     login(username: $username, email: $email, password: $password) {
       user {
         id
-        username
+        email
         password
+        username
       }
       token
+    }
+  }
+`;
+
+const LOGOUT_MUTATION = gql`
+  mutation logout {
+    logout {
+      id
+      email
+      password
+      username
     }
   }
 `;
@@ -34,11 +46,10 @@ const LOGIN_MUTATION = gql`
 const SIGNUP_MUTATION = gql`
   mutation signup($username: String!, $email: String!, $password: String!) {
     signup(username: $username, email: $email, password: $password) {
-      user {
-        id
-        username
-        password
-      }
+      id
+      email
+      password
+      username
     }
   }
 `;
@@ -69,19 +80,24 @@ let AuthProvider = (props) => {
   });
 
   // logout
-
-  // signup
-  const [signup, { data, error, loading }] = useMutation(SIGNUP_MUTATION, {
-    onCompleted({ signup }) {
-      // make user login ??
-      handleLoginResponse(signup);
-      setUserData({ user: null, error });
+  const [logout, { data: logoutData, error: logoutError }] = useMutation(LOGOUT_MUTATION, {
+    onCompleted({ logout }) {
+      handleLogoutResponse();
+      setUserData({ user: null, error: logoutError, isLoggedIn: false });
     }
   });
 
-  const user = userData ? userData : null;
+  // signup
+  const [signup, { data: signupData, error: signupError, loading: signupLoading }] = useMutation(SIGNUP_MUTATION, {
+    onCompleted({ signup }) {
+      handleLogoutResponse();
+      setUserData({ user: null, error: signupError, isLoggedIn: false });
+    }
+  });
 
-  const value = React.useMemo(() => ({ user, login, signup }), [userData]);
+  const user = userData ? userData.user : null;
+
+  const value = React.useMemo(() => ({ user, login, logout, signup }), [userData]);
   return <AuthContext.Provider value={value} {...props} />;
 };
 

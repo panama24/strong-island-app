@@ -35,7 +35,7 @@ const typeDefs = gql`
 
   type Mutation {
     login(username: String!, email: String!, password: String!): LoginResponse!
-    logout(email: String!): User!
+    logout: User!
     signup(username: String!, email: String!, password: String!): User!
   }
 
@@ -56,28 +56,15 @@ const resolvers = {
       return currentUser;
     },
     getUsers: async () => await User.find({}).exec(),
-    /*getUser: async (_, { token }, { user }) => {
-      if (!token) {
-        return null;
-      }
-
-      jwt.verify(token, process.env.JWT_KEY);
-
-      const loggedInUser = await User.findUser(user._id);
-      console.log(user, loggedInUser)
-      //return loggedInUser;
-      return TEMP_USER
-    }*/
   },
   Mutation: {
     login: async (root, { email, password }, context) => {
-      console.log('EMAIL:', email);
       const user = await User.loginUser(email, password);
       return user;
     },
-    logout: async (root, { email }, context) => {
-      const { user } = await User.logoutUser(email);
-      return user;
+    logout: async (root, args, { user }) => {
+      const { loggedOutUser } = await User.logoutUser(user);
+      return loggedOutUser;
     },
     signup: async (root, args) => {
       const user = await User.signupUser(args);
@@ -91,7 +78,6 @@ const getMe = async (token) => {
     try {
       return await jwt.verify(token, process.env.JWT_KEY);
     } catch (e) {
-      // throw new AuthenticationError('Your session expired. Sign in again.');
       return null;
     }
   }
@@ -101,8 +87,6 @@ const server = new ApolloServer({ typeDefs, resolvers, context: async ({ req }) 
     if (req) {
       const token = req.headers.authorization || '';
       const user = await getMe(token);
-      console.log('getMe:', user);
-
       return { user };
     }
   },
