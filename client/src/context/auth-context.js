@@ -1,13 +1,9 @@
 import React from 'react';
 import { withApollo } from 'react-apollo';
-import { useQuery, useLazyQuery, useMutation } from '@apollo/react-hooks';
+import { useLazyQuery, useMutation } from '@apollo/react-hooks';
 import { gql } from 'apollo-boost';
-import * as authClient from '../utils/auth-client';
 import { getToken, handleLoginResponse, handleLogoutResponse } from '../utils/auth';
-import { useAsync } from '../utils/use-async';
-import { useBootstrapAppData } from '../utils/bootstrap';
 
-const Loader = () => <>Loading...</>;
 const ME_QUERY = gql`
   query getUser($token: String) {
     getUser(token: $token) {
@@ -55,49 +51,85 @@ const SIGNUP_MUTATION = gql`
 `;
 
 const AuthContext = React.createContext();
-const initialState = { user: null, error: null, isLoggedIn: false };
 let AuthProvider = (props) => {
   const [userData, setUserData] = React.useState();
 
   React.useEffect(() => {
     getMe();
-  }, [setUserData]);
+  }, []);
 
   // getUser
-  const [getMe, { data: getUserData, error: getUserError, loading: getUserLoading }] = useLazyQuery(ME_QUERY,
+  const [getMe, meData] = useLazyQuery(ME_QUERY,
     { variables: { token: getToken() },
     onCompleted({ getUser }) {
-      setUserData({ user: getUser, error: getUserError, isLoggedIn: true });
+      setUserData({
+        user: getUser,
+        error: meData.error,
+        loading: meData.loading,
+        isLoggedIn: true
+      });
     }
   });
 
   // login
-  const [login, { data: loginData, error: loginError }] = useMutation(LOGIN_MUTATION, {
+  const [login, loginData] = useMutation(LOGIN_MUTATION, {
     onCompleted({ login }) {
       handleLoginResponse(login.token);
-      setUserData({ user: login, error: loginError, isLoggedIn: true });
+      setUserData({
+        error: loginData.error,
+        isLoggedIn: true,
+        loading: loginData.loading,
+        user: login,
+      });
     }
   });
 
   // logout
-  const [logout, { data: logoutData, error: logoutError }] = useMutation(LOGOUT_MUTATION, {
+  const [logout, logoutData] = useMutation(LOGOUT_MUTATION, {
     onCompleted({ logout }) {
       handleLogoutResponse();
-      setUserData({ user: null, error: logoutError, isLoggedIn: false });
+      setUserData({
+        user: null,
+        error: logoutData.error,
+        isLoggedIn: false,
+        loading: false,
+      });
     }
   });
 
   // signup
-  const [signup, { data: signupData, error: signupError, loading: signupLoading }] = useMutation(SIGNUP_MUTATION, {
+  const [signup, signupData] = useMutation(SIGNUP_MUTATION, {
     onCompleted({ signup }) {
       handleLogoutResponse();
-      setUserData({ user: null, error: signupError, isLoggedIn: false });
+      setUserData({
+        user: null,
+        error: signupData.error,
+        isLoggedIn: false,
+        loading: signupData.loading,
+      });
     }
   });
 
+  const error = userData ? userData.error : null;
+  const loading = userData ? userData.loading : false;
   const user = userData ? userData.user : null;
 
-  const value = React.useMemo(() => ({ user, login, logout, signup }), [userData]);
+  const value = React.useMemo(() => ({
+        error,
+        loading,
+        login,
+        logout,
+        signup,
+        user,
+  }), [
+    error,
+    loading,
+    login,
+    logout,
+    signup,
+    user,
+  ]);
+
   return <AuthContext.Provider value={value} {...props} />;
 };
 

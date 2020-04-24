@@ -1,9 +1,5 @@
 import React from 'react';
-import { useMutation } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
 import { useAuth } from './context/auth-context';
-import { handleLoginResponse, isLoggedIn } from './utils/auth';
-import { useBootstrapAppData } from './utils/bootstrap';
 
 const initialValues = { email: '', password: '', username: '' };
 const AuthForm = ({ onSubmit }) => {
@@ -59,7 +55,12 @@ const AuthenticatedApp = () => {
 };
 
 const UnauthenticatedApp = () => {
-  const { login, signup } = useAuth();
+  const { loading, login, signup } = useAuth();
+
+  if (loading) {
+    return <Loader />;
+  }
+
   return (
     <div>
       <div>
@@ -77,7 +78,6 @@ const UnauthenticatedApp = () => {
 const Loader = () => <>Loading...</>;
 const App = () => {
   const { user } = useAuth();
-  console.log('***********:', user);
   return (
     <React.Suspense fallback={<Loader />}>
       { user ? <AuthenticatedApp /> : <UnauthenticatedApp /> }
