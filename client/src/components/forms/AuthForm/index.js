@@ -24,9 +24,6 @@ const AuthForm = ({ mutation, title }) => {
     onSubmitCB
   );
 
-  const passwordHint =
-    "Must be 8-15 characters and contain one uppercase and one lowercase letter, one number and one special character.";
-
   return (
     <div>
       <h2>{title}</h2>
@@ -60,9 +57,11 @@ const AuthForm = ({ mutation, title }) => {
           value={state.password.value}
           placeholder="Hello123!"
         />
-        <span>{passwordHint}</span>
         {state.password.error && (
           <span style={errorStyle}>{state.password.error}</span>
+        )}
+        {title.toLowerCase() === AUTHFORM.Login && (
+          <a href="#">Forgot password?</a>
         )}
         <button disabled={disable}>Submit</button>
       </form>

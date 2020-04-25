@@ -27,7 +27,7 @@ const userSchema = new Schema({
     required: true,
     minlength: 7,
   },
-});
+}, { timestamps: true });
 
 userSchema.statics.findUser = async (id) => {
   const user = await User.findById(id);
