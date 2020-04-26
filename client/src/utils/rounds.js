@@ -37,12 +37,8 @@ const toWeightedRoundsArray = (ranges) =>
     return acc.concat(Array(weights[i]).fill(curr));
   }, []);
 
-const toRangesArray = (timeInMins) => {
-  return [
-    getLowRange(timeInMins),
-    getMidRange(timeInMins),
-    getHighRange(timeInMins),
-  ];
+const toRangesArray = (mins) => {
+  return [getLowRange(mins), getMidRange(mins), getHighRange(mins)];
 };
 
 const toRandomRangeFromRanges = (rangesArray) => {
@@ -54,16 +50,13 @@ const toRandomRangeFromRanges = (rangesArray) => {
   ];
 };
 
-const toRounds = (timeInMins) => {
+const toRounds = (mins) => {
   // an array of ranges [start, end] for each range
-  const rangesArray = toRangesArray(timeInMins);
-
+  const rangesArray = toRangesArray(mins);
   // randomly choose a number from each range
   const ranges = toRandomRangeFromRanges(rangesArray);
-
   // construct weighted array
   const weightedArray = toWeightedRoundsArray(ranges);
-
   // randomly choose number (rounds) from weighted array
   return getRandomEl(weightedArray);
 };

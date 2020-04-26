@@ -132,16 +132,125 @@ const MOVEMENT = {
   type: MOVEMENT_TYPE.Weightlifting,
 };
 
-const MOVEMENTS = [
+const ALL_MOVEMENTS = [
   {
-    id: "23",
+    id: "22",
     maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
     femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Back Squat",
     name: "squat",
     secondsPerRep: 4,
     type: MOVEMENT_TYPE.Weightlifting,
   },
+  {
+    id: "23",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Press",
+    name: "press",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "24",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Snatch",
+    name: "snatch",
+    secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "25",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Clean",
+    name: "clean",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "26",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Deadlift",
+    name: "deadlift",
+    secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "27",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    name: "bench",
+    displayName: "Bench Press",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "28",
+    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
+    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    displayName: "Overhead Squat",
+    name: "overheadSquat",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "29",
+    maleWeightLoads: { easy: 14, moderate: 20, hard: 30 },
+    femaleWeightLoads: { easy: 10, moderate: 14, hard: 20 },
+    displayName: "Wallball",
+    name: "wallball",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "30",
+    maleWeightLoads: null,
+    femaleWeightLoads: null,
+    displayName: "Pushup",
+    name: "pushup",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "31",
+    maleWeightLoads: null,
+    femaleWeightLoads: null,
+    displayName: "Pullup",
+    name: "pullup",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "32",
+    maleWeightLoads: null,
+    femaleWeightLoads: null,
+    displayName: "Run",
+    name: "run",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Monostructural,
+  },
+  {
+    id: "33",
+    maleWeightLoads: null,
+    femaleWeightLoads: null,
+    displayName: "Row",
+    name: "row",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Monostructural,
+  },
 ];
+const gymnasticMovements = ALL_MOVEMENTS.filter(
+  (m) => m.type === MOVEMENT_TYPE.Gymnastic
+);
+const weightliftingMovements = ALL_MOVEMENTS.filter(
+  (m) => m.type === MOVEMENT_TYPE.Weightlifting
+);
+const monostructuralMovements = ALL_MOVEMENTS.filter(
+  (m) => m.type === MOVEMENT_TYPE.Monostructural
+);
 
 const GENERATED_WORKOUTS = [
   {
@@ -245,3 +354,11 @@ const toWorkoutDisplay = (workout) => {
 };
 
 console.log(toWorkoutDisplay(workout));
+
+export {
+  ALL_MOVEMENTS,
+  gymnasticMovements,
+  monostructuralMovements,
+  weightliftingMovements,
+  MOVEMENT_TYPE,
+};

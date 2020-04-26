@@ -4,12 +4,21 @@ import { useAuth } from "./context/auth-context";
 import { AuthenticatedApp } from "./AuthenticatedApp";
 import { UnauthenticatedApp } from "./UnauthenticatedApp";
 
-import { workout } from "./mockData";
+import {
+  workout,
+  gymnasticMovements,
+  monostructuralMovements,
+  weightliftingMovements,
+} from "./mockData";
 
 const App = () => {
   const { user } = useAuth();
 
-  console.log(workout);
+  console.log(
+    gymnasticMovements,
+    monostructuralMovements,
+    weightliftingMovements
+  );
   return (
     <React.Suspense fallback={<Loader />}>
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}
