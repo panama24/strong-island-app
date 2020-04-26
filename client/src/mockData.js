@@ -135,8 +135,10 @@ const MOVEMENT = {
 const ALL_MOVEMENTS = [
   {
     id: "22",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Back Squat",
     name: "squat",
     secondsPerRep: 4,
@@ -144,8 +146,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "23",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Press",
     name: "press",
     secondsPerRep: 4,
@@ -153,8 +157,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "24",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Snatch",
     name: "snatch",
     secondsPerRep: 8,
@@ -162,8 +168,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "25",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Clean",
     name: "clean",
     secondsPerRep: 5,
@@ -171,8 +179,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "26",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Deadlift",
     name: "deadlift",
     secondsPerRep: 8,
@@ -180,8 +190,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "27",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     name: "bench",
     displayName: "Bench Press",
     secondsPerRep: 5,
@@ -189,8 +201,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "28",
-    maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-    femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
     displayName: "Overhead Squat",
     name: "overheadSquat",
     secondsPerRep: 10,
@@ -198,8 +212,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "29",
-    maleWeightLoads: { easy: 14, moderate: 20, hard: 30 },
-    femaleWeightLoads: { easy: 10, moderate: 14, hard: 20 },
+    weightLoads: {
+      male: { easy: 14, moderate: 20, hard: 30 },
+      female: { easy: 10, moderate: 14, hard: 20 },
+    },
     displayName: "Wallball",
     name: "wallball",
     secondsPerRep: 5,
@@ -207,8 +223,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "30",
-    maleWeightLoads: null,
-    femaleWeightLoads: null,
+    weightLoads: {
+      male: null,
+      female: null,
+    },
     displayName: "Pushup",
     name: "pushup",
     secondsPerRep: 10,
@@ -216,8 +234,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "31",
-    maleWeightLoads: null,
-    femaleWeightLoads: null,
+    weightLoads: {
+      male: null,
+      female: null,
+    },
     displayName: "Pullup",
     name: "pullup",
     secondsPerRep: 10,
@@ -225,23 +245,57 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "32",
-    maleWeightLoads: null,
-    femaleWeightLoads: null,
+    weightLoads: {
+      male: null,
+      female: null,
+    },
     displayName: "Run",
     name: "run",
     secondsPerRep: 10,
     type: MOVEMENT_TYPE.Monostructural,
+    units: [UNITS.Meters],
   },
   {
     id: "33",
-    maleWeightLoads: null,
-    femaleWeightLoads: null,
+    weightLoads: {
+      male: null,
+      female: null,
+    },
     displayName: "Row",
     name: "row",
     secondsPerRep: 10,
     type: MOVEMENT_TYPE.Monostructural,
+    units: [UNITS.Calories, UNITS.Meters],
+  },
+  {
+    id: "34",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Bike",
+    name: "bike",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Monostructural,
+    units: [UNITS.Calories, UNITS.Meters],
+  },
+  {
+    id: "35",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Double-under",
+    name: "doubleUnder",
+    secondsPerRep: 1,
+    type: MOVEMENT_TYPE.Monostructural,
+    units: [],
   },
 ];
+const UNITS = {
+  Calories: "calories",
+  Meters: "meters",
+};
 const gymnasticMovements = ALL_MOVEMENTS.filter(
   (m) => m.type === MOVEMENT_TYPE.Gymnastic
 );

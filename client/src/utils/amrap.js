@@ -21,6 +21,7 @@ import { toSeconds } from "./time";
  * AMRAP
  * -- time domain input from user
  * -- choose random goal for rounds
+ * -- choose intensity level (will determine weight load)
  * -- choose number of movements
  * -- divide time domain (in sec) into rounds
  * -- construct movement type array of M, W or G
@@ -30,8 +31,26 @@ import { toSeconds } from "./time";
 
 // mocks
 const timeDomainInMins = 15;
+// borrow round logic from rounds
+// intensity level
+const INTENSITY = {
+  Easy: "easy",
+  Moderate: "moderate",
+  Hard: "hard",
+};
+const weightedIntensityMap = [
+  [INTENSITY.Hard, 1],
+  [INTENSITY.Moderate, 7],
+  [INTENSITY.Easy, 3],
+];
+const toRandomIntensity = (intensityArray) => {
+  const intensityArray = weightedIntensityMap.reduce((acc, curr) => {
+    return acc.concat(Array(curr[1]).fill(curr[0]));
+  }, []);
+  return getRandomEl(intensityArray); // 'moderate'
+};
 
-// methods
+// movements
 const weightedMovementNumberRangesByDuration = {
   // [ numberOfMovements, weight ]
   [DURATION.Short]: [
@@ -51,61 +70,88 @@ const weightedMovementNumberRangesByDuration = {
     [6, 1],
   ],
 };
-
 const toNumberOfMovementsByDuration = (mins) =>
   weightedMovementNumberRangesByDuration[getDuration(mins)];
-
-// construct weightedArray
 // ranges = [ [ 3, 4 ], [ 4, 4 ], [ 5, 1 ], [ 6, 1 ] ] ;
-const toWeightedArray = (ranges) =>
+const toWeightedMovementsArray = (ranges) =>
   ranges.reduce((acc, curr) => {
     return acc.concat(Array(curr[1]).fill(curr[0]));
   }, []);
-
-// randomly choose
 const toRandomNumberOfMovements = (mins) => {
   const numberOfMovementsByDuration = toNumberOfMovementsByDuration(mins);
-  const weightedArray = toWeightedArray(numberOfMovementsByDuration);
+  const weightedArray = toWeightedMovementsArray(numberOfMovementsByDuration);
   return getRandomEl(weightedArray);
 };
-
-// put this in time.js
+// put this in time.js?
 const toSecondsPerRound = (mins, rds) => Math.round(toSeconds(mins) / rds);
 
-const toRandomMovementTypeArray = (n) =>
+const toRandomMovementTypesArray = (n) =>
   Array(n)
     .fill(null)
     .map((_) => getRandomEl(Object.keys(MOVEMENT_TYPE)));
 
-// construct array
+// construct array of movement objects
 const toMovementsArray = (types) => {
-  // types: ['weightlifting', 'gymnastic', 'monostructural'];
-  // put this in mockData?
-  const typeMap = {
+  const movementTypeMap = {
     [MOVEMENT_TYPE.Gymnastic]: gymnasticMovements,
     [MOVEMENT_TYPE.Monostructural]: monostructuralMovements,
     [MOVEMENT_TYPE.Weightlifting]: weightliftingMovements,
   };
-  return types.map((t) => getRandomEl(typeMap[t]));
+  return types.map((t) => getRandomEl(movementTypeMap[t]));
 };
+
+const intensityToSecondsPerRepToAddMap = {
+  [INTENSITY.Easy]: 0,
+  [INTENSITY.Moderate]: 2,
+  [INTENSITY.Hard]: 6,
+};
+
+// accounts for intensity
+const toIntensifiedSecondsPerRep = (intensity, movement) =>
+  intensityToSecondsPerRepToAddMap[intensity] + movement.secondsPerRep;
 
 // secondsPerRound = 200, numberOfMovements = 3
 // choose amount of secondsPerRound for each movement
-// unweighted
-const mapRepsToMovement = (secondsPerRd, numberOfMovements, movements) => {
-  const secondsPerMovement = Math.round(secondsPerRd / numberOfMovements);
-  return movements.map((movement) => ({
-    reps: toReps(secondsPerMovement, movement),
-  }));
+const toAmrap = (secondsPerRd, numberOfMovements, movements, intensity) => {
+  return movements.map((movement) => {
+    return {
+      name: movement.displayName,
+      reps: toIntensifiedReps(
+        Math.round(secondsPerRd / numberOfMovements),
+        intensity,
+        movement
+      ),
+      ...toLoadsOrUnits(intensity, movement),
+    };
+  });
 };
 
-const toReps = (seconds, movement) =>
-  Math.round(seconds / movement.secondsPerRep);
+const toIntensifiedReps = (totalSeconds, intensity, movement) => {
+  const intensifiedSecondsPerRep = toIntensifiedSecondsPerRep(
+    intensity,
+    movement
+  );
+  return Math.round(totalSeconds / intensifiedSecondsPerRep);
+};
 
-/* construct object at the end
-  return movements.map((m) => ({
-    name: m.displayName,
-    reps: toReps(m),
-    loads: toLoads(m),
-  }));
-  */
+const toLoadsOrUnits = (intensity, movement) => {
+  const { female, male } = movement.weightLoads;
+  if (female && male) {
+    return {
+      loads: {
+        f: female[intensity],
+        m: male[intensity],
+      },
+    };
+  }
+
+  if (movement.units && movement.units.length >= 0) {
+    return {
+      // construct units reps
+      // need to have chosen distance etc before this
+      unit: getRandomEl(movement.units),
+    };
+  }
+};
+
+const toMonostructuralUnits = () => {};
