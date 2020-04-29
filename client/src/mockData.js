@@ -1,27 +1,17 @@
-const MOVEMENT_TYPE = {
-  Weightlifting: "weightlifting",
-  Gymnastic: "gymnastic",
-  Monostructural: "monostructural",
-};
+import { MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_STYLE } from "./types";
 
-const SCORETYPE = {
-  Time: "time",
-  Task: "task",
-};
+// const LEVELS = {
+//   First: "first",
+//   Second: "second",
+//   Third: "third",
+//   Unlimited: "unlimited",
+// };
 
-const WORKOUTSTYLE = {
-  Amrap: "amrap",
-  Rounds: "rounds",
-  Interval: "interval",
+const UNITS = {
+  Calories: "calories",
+  Meters: "meters",
 };
-
-const LEVELS = {
-  First: "first",
-  Second: "second",
-  Third: "third",
-  Unlimited: "unlimited",
-};
-
+/*
 const USER = {
   id: "1",
   firstName: "Jessica",
@@ -85,8 +75,8 @@ const BENCHMARK_WORKOUTS = [
     previousScores: [],
     reps: [{}, {}],
     scoreStandard: 100,
-    scoreType: SCORETYPE.Time,
-    style: WORKOUTSTYLE.Amrap,
+    scoreType: SCORE_TYPE.Time,
+    style: WORKOUT_STYLE.Amrap,
     title: "Benchmark Workout One",
     timeCap: 120,
     weightLoads: [{}, {}],
@@ -100,8 +90,8 @@ const BENCHMARK_WORKOUTS = [
     previousScores: [],
     reps: [{}, {}],
     scoreStandard: 100,
-    scoreType: SCORETYPE.Task,
-    style: WORKOUTSTYLE.Rounds,
+    scoreType: SCORE_TYPE.Task,
+    style: WORKOUT_STYLE.Rounds,
     title: "Benchmark Workout Two",
     timeCap: 120,
     weightLoads: [{}, {}],
@@ -115,8 +105,8 @@ const BENCHMARK_WORKOUTS = [
     previousScores: [],
     reps: [{}, {}],
     scoreStandard: 100,
-    scoreType: SCORETYPE.Task,
-    style: WORKOUTSTYLE.Interval,
+    scoreType: SCORE_TYPE.Task,
+    style: WORKOUT_STYLE.Interval,
     title: "Benchmark Workout Three",
     timeCap: 120,
     weightLoads: [{}, {}],
@@ -131,6 +121,7 @@ const MOVEMENT = {
   secondsPerRep: 4,
   type: MOVEMENT_TYPE.Weightlifting,
 };
+*/
 
 const ALL_MOVEMENTS = [
   {
@@ -251,7 +242,8 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Run",
     name: "run",
-    secondsPerRep: 10,
+    metersPerRep: 50,
+    secondsPerMeterRep: 30,
     type: MOVEMENT_TYPE.Monostructural,
     units: [UNITS.Meters],
   },
@@ -263,7 +255,10 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Row",
     name: "row",
-    secondsPerRep: 10,
+    caloriesPerRep: 1,
+    metersPerRep: 50,
+    secondsPerCalorieRep: 10,
+    secondsPerMeterRep: 30,
     type: MOVEMENT_TYPE.Monostructural,
     units: [UNITS.Calories, UNITS.Meters],
   },
@@ -275,9 +270,10 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Bike",
     name: "bike",
-    secondsPerRep: 10,
+    caloriesPerRep: 1,
+    secondsPerCalorieRep: 20,
     type: MOVEMENT_TYPE.Monostructural,
-    units: [UNITS.Calories, UNITS.Meters],
+    units: [UNITS.Calories],
   },
   {
     id: "35",
@@ -292,10 +288,6 @@ const ALL_MOVEMENTS = [
     units: [],
   },
 ];
-const UNITS = {
-  Calories: "calories",
-  Meters: "meters",
-};
 const gymnasticMovements = ALL_MOVEMENTS.filter(
   (m) => m.type === MOVEMENT_TYPE.Gymnastic
 );
@@ -306,23 +298,23 @@ const monostructuralMovements = ALL_MOVEMENTS.filter(
   (m) => m.type === MOVEMENT_TYPE.Monostructural
 );
 
-const GENERATED_WORKOUTS = [
-  {
-    completedOn: null,
-    id: "20",
-    isComplete: false,
-    movements: [{}, {}],
-    previousScores: [],
-    reps: [{}, {}],
-    score: null,
-    scoreStandard: 100,
-    scoreType: SCORETYPE.Task,
-    timeCap: 120,
-    title: "Some Cool WOD",
-    weightLoads: [{}, {}],
-    style: WORKOUTSTYLE.Interval,
-  },
-];
+// const GENERATED_WORKOUTS = [
+//   {
+//     completedOn: null,
+//     id: "20",
+//     isComplete: false,
+//     movements: [{}, {}],
+//     previousScores: [],
+//     reps: [{}, {}],
+//     score: null,
+//     scoreStandard: 100,
+//     scoreType: SCORE_TYPE.Task,
+//     timeCap: 120,
+//     title: "Some Cool WOD",
+//     weightLoads: [{}, {}],
+//     style: WORKOUT_STYLE.Interval,
+//   },
+// ];
 
 /** * First Level Benchmark Workouts:
  * AMRAP 10 Cindy - benchmark: 5 round
@@ -352,10 +344,10 @@ const GENERATED_WORKOUTS = [
 export const workout = {
   id: "20",
   scoreStandard: 100,
-  scoreType: SCORETYPE.Task,
+  scoreType: SCORE_TYPE.Task,
   timeCap: 120,
   title: "Some Cool WOD",
-  style: WORKOUTSTYLE.Interval,
+  style: WORKOUT_STYLE.Interval,
   movements: [
     {
       id: "23",
@@ -393,26 +385,10 @@ export const workout = {
   ],
 };
 
-const toFormatLoads = (loads) =>
-  loads.female && loads.male ? `@${loads.male}/${loads.female}lbs.` : null;
-
-const toWorkoutDisplay = (workout) => {
-  return workout.reps.map((rep, i) => {
-    const movementName = workout.movements[i].displayName;
-    const formattedLoads = toFormatLoads(workout.weightLoads[i]);
-
-    return formattedLoads
-      ? `${rep} ${movementName} ${formattedLoads}`
-      : `${rep} ${movementName}`;
-  });
-};
-
-console.log(toWorkoutDisplay(workout));
-
 export {
   ALL_MOVEMENTS,
   gymnasticMovements,
   monostructuralMovements,
   weightliftingMovements,
-  MOVEMENT_TYPE,
+  UNITS,
 };

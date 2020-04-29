@@ -4,21 +4,12 @@ import { useAuth } from "./context/auth-context";
 import { AuthenticatedApp } from "./AuthenticatedApp";
 import { UnauthenticatedApp } from "./UnauthenticatedApp";
 
-import {
-  workout,
-  gymnasticMovements,
-  monostructuralMovements,
-  weightliftingMovements,
-} from "./mockData";
+import { toAmrap } from "./utils/amrap";
 
 const App = () => {
   const { user } = useAuth();
-
-  console.log(
-    gymnasticMovements,
-    monostructuralMovements,
-    weightliftingMovements
-  );
+  const timeDomain = 15;
+  console.log(toAmrap(timeDomain));
   return (
     <React.Suspense fallback={<Loader />}>
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}

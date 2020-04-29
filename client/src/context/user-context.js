@@ -1,7 +1,8 @@
-import React from 'react';
-import { useQuery } from '@apollo/react-hooks';
-import { gql } from 'apollo-boost';
+import React from "react";
+// import { useQuery } from '@apollo/react-hooks';
+// import { gql } from "apollo-boost";
 
+/*
 const ALL_USERS = gql`
   {
     getUsers {
@@ -10,17 +11,16 @@ const ALL_USERS = gql`
     }
   }
 `;
+*/
 
 const UserContext = React.createContext();
 
 const UserProvider = (props) => {
   if (false) {
-    return <>Loading...</>
+    return <>Loading...</>;
   }
 
-  return (
-    <UserContext.Provider value={{  }} { ...props } />
-  );
+  return <UserContext.Provider value={{}} {...props} />;
 };
 
 const useUser = () => React.useContext(UserContext);
