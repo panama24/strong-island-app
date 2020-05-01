@@ -1,16 +1,11 @@
-import { MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_STYLE } from "./types";
+import {
+  DURATION,
+  MOVEMENT_TYPE,
+  SCORE_TYPE,
+  WORKOUT_STYLE,
+  UNITS,
+} from "./types";
 
-// const LEVELS = {
-//   First: "first",
-//   Second: "second",
-//   Third: "third",
-//   Unlimited: "unlimited",
-// };
-
-const UNITS = {
-  Calories: "calories",
-  Meters: "meters",
-};
 /*
 const USER = {
   id: "1",
@@ -112,15 +107,6 @@ const BENCHMARK_WORKOUTS = [
     weightLoads: [{}, {}],
   },
 ];
-
-const MOVEMENT = {
-  id: "23",
-  maleWeightLoads: { easy: 95, moderate: 135, hard: 185 },
-  femaleWeightLoads: { easy: 65, moderate: 95, hard: 135 },
-  name: "squat",
-  secondsPerRep: 4,
-  type: MOVEMENT_TYPE.Weightlifting,
-};
 */
 
 const ALL_MOVEMENTS = [
@@ -242,10 +228,25 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Run",
     name: "run",
-    metersPerRep: 50,
-    secondsPerMeterRep: 30,
+    units: {
+      [UNITS.Calories]: {
+        secondsPerRep: 6,
+        unitsPerRep: 1,
+        step: 1,
+        [DURATION.Short]: [5, 20],
+        [DURATION.Medium]: [15, 30],
+        [DURATION.Long]: [25, 50],
+      },
+      [UNITS.Meters]: {
+        secondsPerRep: 0.2,
+        unitsPerRep: 1,
+        step: 50,
+        [DURATION.Short]: [150, 300],
+        [DURATION.Medium]: [350, 600],
+        [DURATION.Long]: [500, 1000],
+      },
+    },
     type: MOVEMENT_TYPE.Monostructural,
-    units: [UNITS.Meters],
   },
   {
     id: "33",
@@ -255,12 +256,25 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Row",
     name: "row",
-    caloriesPerRep: 1,
-    metersPerRep: 50,
-    secondsPerCalorieRep: 10,
-    secondsPerMeterRep: 30,
+    units: {
+      [UNITS.Calories]: {
+        secondsPerRep: 6,
+        unitsPerRep: 1,
+        step: 1,
+        [DURATION.Short]: [5, 20],
+        [DURATION.Medium]: [15, 30],
+        [DURATION.Long]: [25, 50],
+      },
+      [UNITS.Meters]: {
+        secondsPerRep: 0.2,
+        unitsPerRep: 1,
+        step: 50,
+        [DURATION.Short]: [150, 300],
+        [DURATION.Medium]: [350, 600],
+        [DURATION.Long]: [500, 1000],
+      },
+    },
     type: MOVEMENT_TYPE.Monostructural,
-    units: [UNITS.Calories, UNITS.Meters],
   },
   {
     id: "34",
@@ -270,10 +284,24 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Bike",
     name: "bike",
-    caloriesPerRep: 1,
-    secondsPerCalorieRep: 20,
-    type: MOVEMENT_TYPE.Monostructural,
-    units: [UNITS.Calories],
+    units: {
+      [UNITS.Calories]: {
+        secondsPerRep: 6,
+        unitsPerRep: 1,
+        step: 1,
+        [DURATION.Short]: [5, 20],
+        [DURATION.Medium]: [15, 30],
+        [DURATION.Long]: [25, 50],
+      },
+      [UNITS.Meters]: {
+        secondsPerRep: 0.2,
+        unitsPerRep: 1,
+        step: 50,
+        [DURATION.Short]: [150, 300],
+        [DURATION.Medium]: [350, 600],
+        [DURATION.Long]: [500, 1000],
+      },
+    },
   },
   {
     id: "35",
@@ -390,5 +418,4 @@ export {
   gymnasticMovements,
   monostructuralMovements,
   weightliftingMovements,
-  UNITS,
 };

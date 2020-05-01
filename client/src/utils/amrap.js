@@ -12,7 +12,8 @@ import {
   toMovementsArray,
   toRandomNumberOfMovements,
 } from "./movements";
-import { toUnitsAsReps } from "./units";
+import { toUnits } from "./units";
+import { getDuration } from "./duration";
 
 /**
  * AMRAP
@@ -25,21 +26,37 @@ import { toUnitsAsReps } from "./units";
  * -- use weighted percentage to choose reps per movement based on sec per rep
  * -- round to make pretty number
  */
-
 const toAmrap = (timeDomainInMinutes) => {
   const rounds = toRounds(timeDomainInMinutes);
   const intensity = toRandomIntensity();
   const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
+  // CANNOT BE SAME MOVEMENT BACK TO BACK
+  const movements = toMovementsArray(numberOfMovements);
   const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
+  // monostructural movements will NOT respect this perfectly
+  const secondsPerMovementPerRd = Math.round(
+    secondsPerRound / numberOfMovements
+  );
 
-  const movements = toMovementsArray(numberOfMovements).map((movement) => {
-    const secondsPerMovementPerRd = Math.round(
-      secondsPerRound / numberOfMovements
-    );
+  // pull this out
+  const getUnitsByDuration = (movement, minutes) => {
+    const duration = getDuration(minutes);
+    return toUnits(movement, duration);
+  };
+
+  const reps = movements.map((movement) => {
+    if (isMonostructural(movement)) {
+      const unitsbyDuration = getUnitsByDuration(movement, timeDomainInMinutes);
+      return {
+        name: movement.displayName,
+        reps: unitsbyDuration,
+      };
+    }
+
+    // make another option for movements without loads
     return {
       name: movement.displayName,
       reps: toReps(secondsPerMovementPerRd, intensity, movement),
-      // reps: toIntensifiedReps(secondsPerMovementPerRd, intensity, movement),
       ...toLoadsOrUnits(intensity, movement),
     };
   });
@@ -49,6 +66,7 @@ const toAmrap = (timeDomainInMinutes) => {
     movements,
     name: "Lame Workout Name",
     rounds,
+    reps,
     // scoreStandard: toScoreStandard(),
     scoreType: SCORE_TYPE.Time,
     style: WORKOUT_STYLE.Amrap,
@@ -60,9 +78,6 @@ const toAmrap = (timeDomainInMinutes) => {
 const toReps = (totalSeconds, intensity, movement) => {
   if (isWeightlifting(movement)) {
     return toIntensifiedReps(totalSeconds, intensity, movement);
-  }
-  if (isMonostructural(movement) && movement.units.length > 0) {
-    return toUnitsAsReps(totalSeconds, movement);
   }
   return toIntensifiedReps(totalSeconds, intensity, movement);
 };

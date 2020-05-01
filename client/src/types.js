@@ -1,3 +1,9 @@
+const DURATION = {
+  Short: "short",
+  Medium: "medium",
+  Long: "long",
+};
+
 const MOVEMENT_TYPE = {
   Weightlifting: "weightlifting",
   Gymnastic: "gymnastic",
@@ -26,4 +32,4 @@ const UNITS = {
   Meters: "meters",
 };
 
-export { LEVELS, MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_STYLE, UNITS };
+export { DURATION, LEVELS, MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_STYLE, UNITS };

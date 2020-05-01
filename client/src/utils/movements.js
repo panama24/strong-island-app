@@ -3,15 +3,15 @@ import {
   monostructuralMovements,
   weightliftingMovements,
 } from "../mockData";
-import { MOVEMENT_TYPE } from "../types";
-import { DURATION, getDuration } from "./duration";
+import { DURATION, MOVEMENT_TYPE } from "../types";
+import { getDuration } from "./duration";
 import { getRandomEl } from "./random";
 
 const weightedMovementNumberRangesByDuration = {
   // [ numberOfMovements, weight ]
   [DURATION.Short]: [
-    [1, 1],
-    [2, 5],
+    // [1, 1],
+    [2, 6],
     [3, 4],
   ],
   [DURATION.Medium]: [
