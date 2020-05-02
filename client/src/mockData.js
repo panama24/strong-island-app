@@ -60,6 +60,17 @@ const mockLevels = [
   },
 ];
 
+  {
+    id: "23",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Press",
+    name: "press",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
 const BENCHMARK_WORKOUTS = [
   {
     completedOn: null,
@@ -111,6 +122,17 @@ const BENCHMARK_WORKOUTS = [
 
 const ALL_MOVEMENTS = [
   {
+    id: "21",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Front Squat",
+    name: "frontSquat",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
     id: "22",
     weightLoads: {
       male: { easy: 95, moderate: 135, hard: 185 },
@@ -133,6 +155,28 @@ const ALL_MOVEMENTS = [
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
+    id: "19",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Push Press",
+    name: "pushPress",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "18",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Jerk",
+    name: "jerk",
+    secondsPerRep: 6,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
     id: "24",
     weightLoads: {
       male: { easy: 95, moderate: 135, hard: 185 },
@@ -140,6 +184,28 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Snatch",
     name: "snatch",
+    secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "17",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Power Snatch",
+    name: "powerSnatch",
+    secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "16",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Hang Snatch",
+    name: "hangSnatch",
     secondsPerRep: 8,
     type: MOVEMENT_TYPE.Weightlifting,
   },
@@ -149,9 +215,31 @@ const ALL_MOVEMENTS = [
       male: { easy: 95, moderate: 135, hard: 185 },
       female: { easy: 65, moderate: 95, hard: 135 },
     },
-    displayName: "Clean",
+    displayName: "Squat Clean",
+    name: "squatClean",
+    secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "15",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Power Clean",
     name: "clean",
     secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "14",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Clean & Jerk",
+    name: "clean&Jerk",
+    secondsPerRep: 12,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -163,6 +251,17 @@ const ALL_MOVEMENTS = [
     displayName: "Deadlift",
     name: "deadlift",
     secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "14",
+    weightLoads: {
+      male: { easy: 95, moderate: 135, hard: 185 },
+      female: { easy: 65, moderate: 95, hard: 135 },
+    },
+    displayName: "Sumo Deadlift High Pull",
+    name: "sdhp",
+    secondsPerRep: 6,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -199,6 +298,28 @@ const ALL_MOVEMENTS = [
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
+    id: "10",
+    weightLoads: {
+      male: { easy: 14, moderate: 20, hard: 30 },
+      female: { easy: 10, moderate: 14, hard: 20 },
+    },
+    displayName: "Ballslam",
+    name: "ballslam",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "13",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Muscle-up",
+    name: "muscleUp",
+    secondsPerRep: 20,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
     id: "30",
     weightLoads: {
       male: null,
@@ -206,7 +327,62 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Pushup",
     name: "pushup",
+    secondsPerRep: 3,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "3",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Burpee",
+    name: "burpee",
+    secondsPerRep: 7,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "11",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Situp",
+    name: "situp",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "12",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "GHD Situp",
+    name: "ghdSitup",
+    secondsPerRep: 6,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "6",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Toes-to-bar",
+    name: "toesToBar",
     secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "5",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Knees-to-elbow",
+    name: "kneesToElbow",
+    secondsPerRep: 8,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -217,7 +393,40 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Pullup",
     name: "pullup",
+    secondsPerRep: 6,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "9",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Chest-to-bar Pullup",
+    name: "chestToBarPullup",
     secondsPerRep: 10,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "7",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Lunge",
+    name: "lunge",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Gymnastic,
+  },
+  {
+    id: "8",
+    weightLoads: {
+      male: null,
+      female: null,
+    },
+    displayName: "Box Jump",
+    name: "boxJump",
+    secondsPerRep: 5,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -229,14 +438,6 @@ const ALL_MOVEMENTS = [
     displayName: "Run",
     name: "run",
     units: {
-      [UNITS.Calories]: {
-        secondsPerRep: 6,
-        unitsPerRep: 1,
-        step: 1,
-        [DURATION.Short]: [5, 20],
-        [DURATION.Medium]: [15, 30],
-        [DURATION.Long]: [25, 50],
-      },
       [UNITS.Meters]: {
         secondsPerRep: 0.2,
         unitsPerRep: 1,

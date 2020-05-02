@@ -51,7 +51,18 @@ const toMovementsArray = (numberOfMovements) => {
     [MOVEMENT_TYPE.Monostructural]: monostructuralMovements,
     [MOVEMENT_TYPE.Weightlifting]: weightliftingMovements,
   };
-  return types.map((t) => getRandomEl(movementTypeMap[t]));
+
+  // prevent "randomly" choosing same movements back to back
+  let movementSet = new Set();
+  return types.map((t) => {
+    let movement = getRandomEl(movementTypeMap[t]);
+    while (movementSet.has(movement.name)) {
+      movement = getRandomEl(movementTypeMap[t]);
+    }
+
+    movementSet.add(movement.name);
+    return movement;
+  });
 };
 
 const isWeightlifting = (movement) =>

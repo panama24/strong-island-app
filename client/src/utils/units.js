@@ -1,37 +1,6 @@
 import { UNITS } from "../types";
 import { getRandomEl } from "./random";
 
-/*
-movement = {
-  id: "34",
-  weightLoads: {
-    male: null,
-    female: null,
-  },
-  displayName: "Bike",
-  name: "bike",
-  type: MOVEMENT_TYPE.Monostructural,
-  units: {
-    [UNITS.Calories]: {
-      secondsPerRep: 6,
-      unitsPerRep: 1,
-      step: 1,
-      [DURATION.Short]: [5, 20],
-      [DURATION.Medium]: [15, 30],
-      [DURATION.Long]: [25, 50],
-    },
-    [UNITS.Meters]: {
-      secondsPerRep: 0.2,
-      unitsPerRep: 1,
-      step: 50,
-      [DURATION.Short]: [150, 300],
-      [DURATION.Medium]: [350, 600],
-      [DURATION.Long]: [500, 1000],
-    }
-  },
-}
-*/
-
 const unitTypeToSecondsPerRepMap = {
   [UNITS.Meters]: "metersPerRep",
   [UNITS.Calories]: "caloriesPerRep",
