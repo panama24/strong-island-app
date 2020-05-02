@@ -29,6 +29,7 @@ const LEVELS = {
 
 const UNITS = {
   Calories: "calories",
+  Inches: "inches",
   Meters: "meters",
 };
 

@@ -420,6 +420,10 @@ const ALL_MOVEMENTS = [
   },
   {
     id: "8",
+    heights: {
+      male: { easy: 20, moderate: 24, hard: 30 },
+      female: { easy: 10, moderate: 20, hard: 24 },
+    },
     weightLoads: {
       male: null,
       female: null,
@@ -428,6 +432,7 @@ const ALL_MOVEMENTS = [
     name: "boxJump",
     secondsPerRep: 5,
     type: MOVEMENT_TYPE.Gymnastic,
+    units: UNITS.Inches,
   },
   {
     id: "32",
@@ -514,7 +519,7 @@ const ALL_MOVEMENTS = [
     name: "doubleUnder",
     secondsPerRep: 1,
     type: MOVEMENT_TYPE.Monostructural,
-    units: [],
+    units: null,
   },
 ];
 const gymnasticMovements = ALL_MOVEMENTS.filter(

@@ -3,7 +3,7 @@ import {
   monostructuralMovements,
   weightliftingMovements,
 } from "../mockData";
-import { DURATION, MOVEMENT_TYPE } from "../types";
+import { DURATION, MOVEMENT_TYPE, UNITS } from "../types";
 import { getDuration } from "./duration";
 import { getRandomEl } from "./random";
 
@@ -70,8 +70,11 @@ const isWeightlifting = (movement) =>
 const isGymnastic = (movement) => movement.type === MOVEMENT_TYPE.Gymnastic;
 const isMonostructural = (movement) =>
   movement.type === MOVEMENT_TYPE.Monostructural;
+const isBoxJumps = (movement) =>
+  isGymnastic(movement) && movement.units === UNITS.Inches;
 
 export {
+  isBoxJumps,
   isGymnastic,
   isMonostructural,
   isWeightlifting,
