@@ -3,7 +3,6 @@ import {
   intensityToSecondsPerRepToAddMap,
   toRandomIntensity,
 } from "./intensity";
-import { getRandomEl } from "./random";
 import { toRounds } from "./rounds";
 import { toSecondsPerRound } from "./time";
 import {
@@ -25,14 +24,13 @@ import { getUnitsByDuration } from "./units";
  * -- use weighted percentage to choose reps per movement based on sec per rep
  * -- round to make pretty number
  */
+
 const toAmrap = (timeDomainInMinutes) => {
   const rounds = toRounds(timeDomainInMinutes);
   const intensity = toRandomIntensity();
   const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
-  // CANNOT BE SAME MOVEMENT BACK TO BACK
   const movements = toMovementsArray(numberOfMovements);
   const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
-  // monostructural movements will NOT respect this perfectly
   const secondsPerMovementPerRd = Math.round(
     secondsPerRound / numberOfMovements
   );
@@ -40,29 +38,42 @@ const toAmrap = (timeDomainInMinutes) => {
   // this should not also return movement name
   const reps = movements.map((movement) => {
     if (isMonostructural(movement)) {
-      // is double-unders
+      // double-unders
       if (movement.units.length === 0) {
+        const reps = toReps(secondsPerMovementPerRd, intensity, movement);
         return {
           name: movement.displayName,
-          reps: toReps(secondsPerMovementPerRd, intensity, movement),
+          reps,
+          formattedReps: `${reps} ${movement.displayName}`,
         };
       }
 
-      const unitsbyDuration = getUnitsByDuration(movement, timeDomainInMinutes);
+      const { units, formattedUnit } = getUnitsByDuration(
+        movement,
+        timeDomainInMinutes
+      );
+
       return {
         name: movement.displayName,
-        reps: unitsbyDuration,
+        reps: units,
+        formattedReps: `${formattedUnit} ${movement.displayName}`,
       };
     }
 
+    const reps = toReps(secondsPerMovementPerRd, intensity, movement);
+    const { formattedLoads } = toLoadsOrUnits(intensity, movement);
     return {
       name: movement.displayName,
-      reps: toReps(secondsPerMovementPerRd, intensity, movement),
+      reps,
+      formattedReps: formattedLoads
+        ? `${reps} ${movement.displayName} ${formattedLoads}`
+        : `${reps} ${movement.displayName}`,
       ...toLoadsOrUnits(intensity, movement),
     };
   });
 
   return {
+    formattedWorkout: toFormattedWorkout(reps),
     intensity,
     movements,
     name: "Lame Workout Name",
@@ -97,9 +108,8 @@ const toIntensifiedReps = (totalSeconds, intensity, movement) => {
 const toLoadsOrUnits = (intensity, movement) => {
   const { female, male } = movement.weightLoads;
   if (female && male) {
-    const formattedLoads = toFormatLoads(movement.weightLoads, intensity);
     return {
-      formattedLoads,
+      formattedLoads: toFormatLoads(movement.weightLoads, intensity),
       loads: {
         female: female[intensity],
         male: male[intensity],
@@ -107,11 +117,10 @@ const toLoadsOrUnits = (intensity, movement) => {
     };
   }
 
-  if (movement.units && movement.units.length >= 0) {
-    return {
-      unit: getRandomEl(movement.units),
-    };
-  }
+  return {
+    formattedLoads: null,
+    loads: {},
+  };
 };
 
 const toFormatLoads = (loads, intensity) =>
@@ -119,23 +128,7 @@ const toFormatLoads = (loads, intensity) =>
     ? `@${loads.male[intensity]}/${loads.female[intensity]}lbs.`
     : null;
 
-const formatUnits = (units) => `${units}`;
-
-// const toWorkoutDisplay = (reps, movement, loadsOrUnits) => {
-//   return reps.map((rep, i) => {
-//     const movementName = movement.displayName;
-
-//     if (Object.keys(loadsOrUnits).contains("loads")) {
-//       const formattedLoads = toFormatLoads(loadsOrUnits.loads);
-//       return formattedLoads
-//         ? `${rep} ${movementName} ${formattedLoads}`
-//         : `${rep} ${movementName}`;
-//     }
-
-//     if (Object.keys(loadsOrUnits).contains("units")) {
-//       return `${rep}${loadsOrUnits.unit} ${movementName}`;
-//     }
-//   });
-// };
+const toFormattedWorkout = (reps) =>
+  reps.map(({ formattedReps }) => `${formattedReps}`);
 
 export { toAmrap };
