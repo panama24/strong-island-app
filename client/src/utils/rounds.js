@@ -1,5 +1,11 @@
-import { getLowRange, getMidRange, getHighRange } from "./range";
+import { toFormattedWorkout } from "./format";
+import { toRandomIntensity, INTENSITY } from "./intensity";
+import { toRandomNumberOfMovements, toMovementsArray } from "./movements";
 import { getRandomEl, toRandomFromRange } from "./random";
+import { getLowRange, getMidRange, getHighRange } from "./range";
+import { toRepsWithLoadOrHeight } from "./reps";
+import { toSecondsPerRound } from "./time";
+import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
 
 /**
  * ROUNDS
@@ -16,20 +22,8 @@ import { getRandomEl, toRandomFromRange } from "./random";
  * -- round down to make pretty number
  */
 
-/**
- * ROUNDS
- * -- time input: 12 mins --> 720 sec
- * -- 2 rounds
- * -- [W, G] --> []
- * -- kbs(5 sec), box jump(10 sec)
- * -- 720 sec / 2 rounds --> 360sec per round
- * -- rest time deduction per round: 30 sec --> 330 sec per round
- * -- [50%, 50%] --> [165s, 165s] --> [33, 16] --> [33 KBS, 16 Box Jump]
- * -- round down (maybe?) to make pretty number
- */
-
 // [low, mid, high] number of rounds
-const weights = [10, 80, 10];
+const weights = [60, 30, 10];
 
 // ranges = [low, mid, high];
 const toWeightedRoundsArray = (ranges) =>
@@ -50,7 +44,7 @@ const toRandomRangeFromRanges = (rangesArray) => {
   ];
 };
 
-const toRounds = (mins) => {
+const toRandomRounds = (mins) => {
   // an array of ranges [start, end] for each range
   const rangesArray = toRangesArray(mins);
   // randomly choose a number from each range
@@ -61,4 +55,46 @@ const toRounds = (mins) => {
   return getRandomEl(weightedArray);
 };
 
-export { toRounds };
+const restByIntensityMap = (seconds) => ({
+  [INTENSITY.Easy]: Math.round(seconds * 0.4),
+  [INTENSITY.Moderate]: Math.round(seconds * 0.3),
+  [INTENSITY.Hard]: Math.round(seconds * 0.2),
+});
+
+const toRounds = (timeDomainInMinutes) => {
+  const rounds = toRandomRounds(timeDomainInMinutes);
+  const intensity = toRandomIntensity();
+  const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
+  const movements = toMovementsArray(numberOfMovements);
+  const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
+  const timeToDeduct = restByIntensityMap(secondsPerRound)[intensity];
+  const secondsPerMovementPerRd = Math.round(
+    (secondsPerRound - timeToDeduct) / numberOfMovements
+  );
+
+  const repsWithLoadOrHeight = toRepsWithLoadOrHeight(
+    intensity,
+    movements,
+    secondsPerMovementPerRd,
+    timeDomainInMinutes
+  );
+
+  return {
+    formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
+    intensity,
+    movements,
+    name: "Rounds for Time",
+    rounds,
+    reps: repsWithLoadOrHeight,
+    scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
+    scoreType: SCORE_TYPE.Task,
+    style: WORKOUT_STYLE.Amrap,
+    time: timeDomainInMinutes,
+    timeCap: timeDomainInMinutes,
+  };
+};
+
+const toScoreStandard = (rounds, timeDomainInMinutes) =>
+  `${rounds} Rounds For Time *${timeDomainInMinutes} minute time cap`;
+
+export { toRandomRounds, toRounds };

@@ -20,8 +20,8 @@ const weightedMovementNumberRangesByDuration = {
     [4, 1],
   ],
   [DURATION.Long]: [
-    [3, 4],
-    [4, 4],
+    [3, 5],
+    [4, 3],
     [5, 1],
     [6, 1],
   ],

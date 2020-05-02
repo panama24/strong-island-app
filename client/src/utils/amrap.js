@@ -2,9 +2,9 @@ import { toFormattedWorkout } from "./format";
 import { toRandomIntensity } from "./intensity";
 import { toMovementsArray, toRandomNumberOfMovements } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
-import { toRounds } from "./rounds";
+import { toRandomRounds } from "./rounds";
 import { toSecondsPerRound } from "./time";
-import { SCORE_TYPE, WORKOUT_STYLE, UNITS } from "../types";
+import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
 
 /**
  * AMRAP
@@ -19,7 +19,7 @@ import { SCORE_TYPE, WORKOUT_STYLE, UNITS } from "../types";
  */
 
 const toAmrap = (timeDomainInMinutes) => {
-  const rounds = toRounds(timeDomainInMinutes);
+  const rounds = toRandomRounds(timeDomainInMinutes);
   const intensity = toRandomIntensity();
   const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
   const movements = toMovementsArray(numberOfMovements);
@@ -38,15 +38,18 @@ const toAmrap = (timeDomainInMinutes) => {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
     intensity,
     movements,
-    name: "Lame Workout Name",
+    name: "AMRAP",
     rounds,
     reps: repsWithLoadOrHeight,
-    // scoreStandard: toScoreStandard(),
+    scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
     scoreType: SCORE_TYPE.Time,
     style: WORKOUT_STYLE.Amrap,
     time: timeDomainInMinutes,
     timeCap: timeDomainInMinutes,
   };
 };
+
+const toScoreStandard = (rounds, timeDomainInMinutes) =>
+  `Complete ${rounds} rounds in ${timeDomainInMinutes} minutes.`;
 
 export { toAmrap };
