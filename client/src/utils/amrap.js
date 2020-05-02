@@ -12,8 +12,7 @@ import {
   toMovementsArray,
   toRandomNumberOfMovements,
 } from "./movements";
-import { toUnits } from "./units";
-import { getDuration } from "./duration";
+import { getUnitsByDuration } from "./units";
 
 /**
  * AMRAP
@@ -38,14 +37,17 @@ const toAmrap = (timeDomainInMinutes) => {
     secondsPerRound / numberOfMovements
   );
 
-  // pull this out
-  const getUnitsByDuration = (movement, minutes) => {
-    const duration = getDuration(minutes);
-    return toUnits(movement, duration);
-  };
-
+  // this should not also return movement name
   const reps = movements.map((movement) => {
     if (isMonostructural(movement)) {
+      // is double-unders
+      if (movement.units.length === 0) {
+        return {
+          name: movement.displayName,
+          reps: toReps(secondsPerMovementPerRd, intensity, movement),
+        };
+      }
+
       const unitsbyDuration = getUnitsByDuration(movement, timeDomainInMinutes);
       return {
         name: movement.displayName,
@@ -53,7 +55,6 @@ const toAmrap = (timeDomainInMinutes) => {
       };
     }
 
-    // make another option for movements without loads
     return {
       name: movement.displayName,
       reps: toReps(secondsPerMovementPerRd, intensity, movement),

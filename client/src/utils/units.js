@@ -1,4 +1,5 @@
 import { UNITS } from "../types";
+import { getDuration } from "./duration";
 import { getRandomEl } from "./random";
 
 const unitTypeToSecondsPerRepMap = {
@@ -18,27 +19,27 @@ const toRangeWithStep = (array, step = 1) => {
     .map((n, i) => n + i * step);
 };
 
-const toUnits = (movement, duration) => {
-  if (movement.units.length === 0) {
-    return movement;
-  }
+const getUnitsByDuration = (movement, minutes) => {
+  const duration = getDuration(minutes);
+  return toUnits(movement, duration);
+};
 
+const toUnits = (movement, duration) => {
   const unit = getRandomEl(Object.keys(movement.units));
   const unitObj = movement.units[unit];
   const unitRangeByDuration = unitObj[duration];
   const randomUnit = getRandomEl(
     toRangeWithStep(unitRangeByDuration, unit.step)
   );
-  // round to nearest 10 or something
-  console.log("randomUnit:", randomUnit);
+  const roundedUnit = Math.ceil(randomUnit / 10) * 10;
 
-  const timeTakenInSeconds = randomUnit * unitObj.secondsPerRep;
+  const timeTakenInSeconds = roundedUnit * unitObj.secondsPerRep;
   return {
     unit,
-    units: randomUnit,
+    units: roundedUnit,
     timeTakenInSeconds,
-    formattedUnit: `${randomUnit} ${unit}`,
+    formattedUnit: `${roundedUnit} ${unit}`,
   };
 };
 
-export { toUnits };
+export { getUnitsByDuration };
