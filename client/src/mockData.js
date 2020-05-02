@@ -129,7 +129,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Front Squat",
     name: "frontSquat",
-    secondsPerRep: 4,
+    secondsPerRep: 5,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -140,7 +140,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Back Squat",
     name: "squat",
-    secondsPerRep: 4,
+    secondsPerRep: 5,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -151,7 +151,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Press",
     name: "press",
-    secondsPerRep: 4,
+    secondsPerRep: 6,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -162,7 +162,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Push Press",
     name: "pushPress",
-    secondsPerRep: 4,
+    secondsPerRep: 7,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -173,7 +173,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Jerk",
     name: "jerk",
-    secondsPerRep: 6,
+    secondsPerRep: 8,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -195,7 +195,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Power Snatch",
     name: "powerSnatch",
-    secondsPerRep: 8,
+    secondsPerRep: 9,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -206,7 +206,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Hang Snatch",
     name: "hangSnatch",
-    secondsPerRep: 8,
+    secondsPerRep: 9,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -217,7 +217,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Squat Clean",
     name: "squatClean",
-    secondsPerRep: 8,
+    secondsPerRep: 10,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -228,7 +228,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Power Clean",
     name: "clean",
-    secondsPerRep: 5,
+    secondsPerRep: 7,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -261,7 +261,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Sumo Deadlift High Pull",
     name: "sdhp",
-    secondsPerRep: 6,
+    secondsPerRep: 8,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -272,7 +272,7 @@ const ALL_MOVEMENTS = [
     },
     name: "bench",
     displayName: "Bench Press",
-    secondsPerRep: 5,
+    secondsPerRep: 8,
     type: MOVEMENT_TYPE.Weightlifting,
   },
   {
@@ -327,7 +327,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Pushup",
     name: "pushup",
-    secondsPerRep: 3,
+    secondsPerRep: 5,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -338,7 +338,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Burpee",
     name: "burpee",
-    secondsPerRep: 7,
+    secondsPerRep: 8,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -349,7 +349,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Situp",
     name: "situp",
-    secondsPerRep: 4,
+    secondsPerRep: 6,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -360,7 +360,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "GHD Situp",
     name: "ghdSitup",
-    secondsPerRep: 6,
+    secondsPerRep: 10,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -382,7 +382,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Knees-to-elbow",
     name: "kneesToElbow",
-    secondsPerRep: 8,
+    secondsPerRep: 10,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -393,7 +393,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Pullup",
     name: "pullup",
-    secondsPerRep: 6,
+    secondsPerRep: 5,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -404,7 +404,7 @@ const ALL_MOVEMENTS = [
     },
     displayName: "Chest-to-bar Pullup",
     name: "chestToBarPullup",
-    secondsPerRep: 10,
+    secondsPerRep: 7,
     type: MOVEMENT_TYPE.Gymnastic,
   },
   {
@@ -444,7 +444,7 @@ const ALL_MOVEMENTS = [
     name: "run",
     units: {
       [UNITS.Meters]: {
-        secondsPerRep: 0.2,
+        secondsPerRep: 0.8,
         unitsPerRep: 1,
         step: 50,
         [DURATION.Short]: [150, 300],
@@ -464,7 +464,7 @@ const ALL_MOVEMENTS = [
     name: "row",
     units: {
       [UNITS.Calories]: {
-        secondsPerRep: 6,
+        secondsPerRep: 10,
         unitsPerRep: 1,
         step: 1,
         [DURATION.Short]: [5, 20],
@@ -472,7 +472,7 @@ const ALL_MOVEMENTS = [
         [DURATION.Long]: [25, 50],
       },
       [UNITS.Meters]: {
-        secondsPerRep: 0.2,
+        secondsPerRep: 0.5,
         unitsPerRep: 1,
         step: 50,
         [DURATION.Short]: [150, 300],
