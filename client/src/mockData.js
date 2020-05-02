@@ -521,6 +521,72 @@ const ALL_MOVEMENTS = [
     type: MOVEMENT_TYPE.Monostructural,
     units: null,
   },
+  {
+    id: "36",
+    weightLoads: {
+      male: { easy: 35, moderate: 50, hard: 70 },
+      female: { easy: 20, moderate: 35, hard: 50 },
+    },
+    displayName: "Dumbbell Snatch",
+    name: "dumbbellSnatch",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "37",
+    weightLoads: {
+      male: { easy: 35, moderate: 50, hard: 70 },
+      female: { easy: 20, moderate: 35, hard: 50 },
+    },
+    displayName: "Dumbbell Clean",
+    name: "dumbbellClean",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "38",
+    weightLoads: {
+      male: { easy: 35, moderate: 53, hard: 70 },
+      female: { easy: 18, moderate: 35, hard: 53 },
+    },
+    displayName: "Goblet Clean",
+    name: "gobletSquat",
+    secondsPerRep: 5,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "39",
+    weightLoads: {
+      male: { easy: 35, moderate: 53, hard: 70 },
+      female: { easy: 18, moderate: 35, hard: 53 },
+    },
+    displayName: "Kettlebell Swing",
+    name: "kettlebellSwing",
+    secondsPerRep: 4,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "40",
+    weightLoads: {
+      male: { easy: 35, moderate: 53, hard: 70 },
+      female: { easy: 18, moderate: 35, hard: 53 },
+    },
+    displayName: "Kettlebell Snatch",
+    name: "kettlebellSnatch",
+    secondsPerRep: 8,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
+  {
+    id: "41",
+    weightLoads: {
+      male: { easy: 35, moderate: 53, hard: 70 },
+      female: { easy: 18, moderate: 35, hard: 53 },
+    },
+    displayName: "Kettlebell Turkish Getup",
+    name: "kettlebellTurkishGetup",
+    secondsPerRep: 20,
+    type: MOVEMENT_TYPE.Weightlifting,
+  },
 ];
 const gymnasticMovements = ALL_MOVEMENTS.filter(
   (m) => m.type === MOVEMENT_TYPE.Gymnastic
