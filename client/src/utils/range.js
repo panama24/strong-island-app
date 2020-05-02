@@ -24,6 +24,7 @@ const getHighRange = (n) => [
   Math.round(getHighRangeStart(n)),
   Math.round(getHighRangeEnd(n)),
 ];
+
 const getMidRangeStart = (n) => 3;
 const getMidRangeEnd = (n) => {
   if (isShortDuration(n)) {
@@ -38,6 +39,7 @@ const getMidRange = (n) => [
   Math.round(getMidRangeStart(n)),
   Math.round(getMidRangeEnd(n)),
 ];
+
 const getLowRangeStart = (n) => n / n;
 const getLowRangeEnd = (n) => n / n + 1;
 const getLowRange = (n) => [

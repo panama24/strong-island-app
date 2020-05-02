@@ -1,11 +1,5 @@
-import { toFormattedWorkout } from "./format";
-import { toRandomIntensity, INTENSITY } from "./intensity";
-import { toRandomNumberOfMovements, toMovementsArray } from "./movements";
 import { getRandomEl, toRandomFromRange } from "./random";
 import { getLowRange, getMidRange, getHighRange } from "./range";
-import { toRepsWithLoadOrHeight } from "./reps";
-import { toSecondsPerRound } from "./time";
-import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
 
 /**
  * ROUNDS
@@ -44,7 +38,7 @@ const toRandomRangeFromRanges = (rangesArray) => {
   ];
 };
 
-const toRandomRounds = (mins) => {
+const toRounds = (mins) => {
   // an array of ranges [start, end] for each range
   const rangesArray = toRangesArray(mins);
   // randomly choose a number from each range
@@ -55,46 +49,4 @@ const toRandomRounds = (mins) => {
   return getRandomEl(weightedArray);
 };
 
-const restByIntensityMap = (seconds) => ({
-  [INTENSITY.Easy]: Math.round(seconds * 0.4),
-  [INTENSITY.Moderate]: Math.round(seconds * 0.3),
-  [INTENSITY.Hard]: Math.round(seconds * 0.2),
-});
-
-const toRounds = (timeDomainInMinutes) => {
-  const rounds = toRandomRounds(timeDomainInMinutes);
-  const intensity = toRandomIntensity();
-  const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
-  const movements = toMovementsArray(numberOfMovements);
-  const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
-  const timeToDeduct = restByIntensityMap(secondsPerRound)[intensity];
-  const secondsPerMovementPerRd = Math.round(
-    (secondsPerRound - timeToDeduct) / numberOfMovements
-  );
-
-  const repsWithLoadOrHeight = toRepsWithLoadOrHeight(
-    intensity,
-    movements,
-    secondsPerMovementPerRd,
-    timeDomainInMinutes
-  );
-
-  return {
-    formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
-    intensity,
-    movements,
-    name: "Rounds for Time",
-    rounds,
-    reps: repsWithLoadOrHeight,
-    scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
-    scoreType: SCORE_TYPE.Task,
-    style: WORKOUT_STYLE.Amrap,
-    time: timeDomainInMinutes,
-    timeCap: timeDomainInMinutes,
-  };
-};
-
-const toScoreStandard = (rounds, timeDomainInMinutes) =>
-  `${rounds} Rounds For Time *${timeDomainInMinutes} minute time cap`;
-
-export { toRandomRounds, toRounds };
+export { toRounds };

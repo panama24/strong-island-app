@@ -1,32 +1,28 @@
 import { toFormattedWorkout } from "./format";
-import { toRandomIntensity } from "./intensity";
-import { toMovementsArray, toRandomNumberOfMovements } from "./movements";
+import { toRandomIntensity, INTENSITY } from "./intensity";
+import { toRandomNumberOfMovements, toMovementsArray } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
 import { toRounds } from "./rounds";
 import { toSecondsPerRound } from "./time";
 import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
 
-/**
- * AMRAP
- * -- time domain input from user
- * -- choose random goal for rounds
- * -- choose intensity level (will determine weight load)
- * -- choose number of movements
- * -- divide time domain (in sec) into rounds
- * -- construct movement type array of M, W or G
- * -- use weighted percentage to choose reps per movement based on sec per rep
- * -- round to make pretty number
- */
+const restByIntensityMap = (seconds) => ({
+  [INTENSITY.Easy]: Math.round(seconds * 0.4),
+  [INTENSITY.Moderate]: Math.round(seconds * 0.3),
+  [INTENSITY.Hard]: Math.round(seconds * 0.2),
+});
 
-const toAmrap = (args) => {
+const toRoundsForTime = (args) => {
   const { rounds, timeDomainInMinutes } = args;
   const intensity = toRandomIntensity();
   const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
   const movements = toMovementsArray(numberOfMovements);
   const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
+  const timeToDeduct = restByIntensityMap(secondsPerRound)[intensity];
   const secondsPerMovementPerRd = Math.round(
-    secondsPerRound / numberOfMovements
+    (secondsPerRound - timeToDeduct) / numberOfMovements
   );
+
   const repsWithLoadOrHeight = toRepsWithLoadOrHeight(
     intensity,
     movements,
@@ -38,11 +34,11 @@ const toAmrap = (args) => {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
     intensity,
     movements,
-    name: "AMRAP",
+    name: "Rounds for Time",
     rounds,
     reps: repsWithLoadOrHeight,
     scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
-    scoreType: SCORE_TYPE.Time,
+    scoreType: SCORE_TYPE.Task,
     style: WORKOUT_STYLE.Amrap,
     time: timeDomainInMinutes,
     timeCap: timeDomainInMinutes,
@@ -50,6 +46,6 @@ const toAmrap = (args) => {
 };
 
 const toScoreStandard = (rounds, timeDomainInMinutes) =>
-  `Complete ${rounds} rounds in ${timeDomainInMinutes} minutes.`;
+  `${rounds} Rounds For Time *${timeDomainInMinutes} minute time cap`;
 
-export { toAmrap };
+export { toRoundsForTime };
