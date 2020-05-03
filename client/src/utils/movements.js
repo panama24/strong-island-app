@@ -4,7 +4,7 @@ import {
   weightliftingMovements,
 } from "../mockData";
 import { DURATION, MOVEMENT_TYPE, UNITS } from "../types";
-import { getDuration } from "./duration";
+import { getDuration, isMediumDuration } from "./duration";
 import { getRandomEl } from "./random";
 
 const weightedMovementNumberRangesByDuration = {
@@ -44,25 +44,68 @@ const toRandomMovementTypesArray = (n) =>
     .fill(null)
     .map((_) => getRandomEl(Object.values(MOVEMENT_TYPE)));
 
+const movementTypeMap = {
+  [MOVEMENT_TYPE.Gymnastic]: gymnasticMovements,
+  [MOVEMENT_TYPE.Monostructural]: monostructuralMovements,
+  [MOVEMENT_TYPE.Weightlifting]: weightliftingMovements,
+};
+
 const toMovementsArray = (numberOfMovements) => {
   const types = toRandomMovementTypesArray(numberOfMovements);
-  const movementTypeMap = {
-    [MOVEMENT_TYPE.Gymnastic]: gymnasticMovements,
-    [MOVEMENT_TYPE.Monostructural]: monostructuralMovements,
-    [MOVEMENT_TYPE.Weightlifting]: weightliftingMovements,
-  };
+  return toUniqueMovements(types);
+};
 
-  // prevent "randomly" choosing same movements back to back
-  let movementSet = new Set();
+const toUniqueMovements = (types) => {
+  let set = new Set();
   return types.map((t) => {
     let movement = getRandomEl(movementTypeMap[t]);
-    while (movementSet.has(movement.name)) {
+    while (set.has(movement.name)) {
       movement = getRandomEl(movementTypeMap[t]);
     }
+    set.add(movement.name);
+    return movement;
+  });
+};
 
+const withinThreshold = (movement, threshold, cushion) =>
+  movement.secondsPerRep >= threshold[0] - cushion &&
+  movement.secondsPerRep <= threshold[1] + cushion;
+
+const toUniqueWithThreshold = (types, threshold) => {
+  let movementSet = new Set();
+  return types.map((t) => {
+    let movement = getRandomEl(
+      movementTypeMap[t].filter((m) =>
+        isMonostructural(m) ? m : withinThreshold(m, threshold, 3)
+      )
+    );
+    while (movementSet.has(movement.name)) {
+      movement = getRandomEl(
+        movementTypeMap[t].filter((m) =>
+          isMonostructural(m) ? m : withinThreshold(m, threshold, 3)
+        )
+      );
+    }
     movementSet.add(movement.name);
     return movement;
   });
+};
+
+const toMovementsArrayBySecondsPerRep = (secondsPerMovementMap) => {
+  const keysToNum = Object.keys(secondsPerMovementMap).map((key) =>
+    Number(key)
+  );
+  const threshold = [
+    secondsPerMovementMap[Math.max(...keysToNum)][0],
+    secondsPerMovementMap[Math.min(...keysToNum)][0],
+  ];
+  const count =
+    secondsPerMovementMap[keysToNum[0]].length === 1
+      ? keysToNum.length
+      : secondsPerMovementMap[keysToNum[0]].length;
+  const types = toRandomMovementTypesArray(count);
+
+  return toUniqueWithThreshold(types, threshold);
 };
 
 const isWeightlifting = (movement) =>
@@ -79,5 +122,6 @@ export {
   isMonostructural,
   isWeightlifting,
   toMovementsArray,
+  toMovementsArrayBySecondsPerRep,
   toRandomNumberOfMovements,
 };

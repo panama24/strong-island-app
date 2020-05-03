@@ -2,10 +2,8 @@
 // export from index
 import { toAmrap } from "./amrap";
 import { toRoundsForTime } from "./roundsForTime";
-import { WORKOUT_STYLE } from "../types";
 import { getRandomEl } from "./random";
 import { toRounds } from "./rounds";
-import { toRandomNumberOfMovements } from "./movements";
 import { toInterval } from "./interval";
 
 const WORKOUT_CATEGORY = {

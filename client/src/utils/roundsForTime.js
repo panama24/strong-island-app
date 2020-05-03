@@ -2,9 +2,23 @@ import { toFormattedWorkout } from "./format";
 import { toRandomIntensity, INTENSITY } from "./intensity";
 import { toRandomNumberOfMovements, toMovementsArray } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
-import { toRounds } from "./rounds";
 import { toSecondsPerRound } from "./time";
 import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
+
+/**
+ * ROUNDS
+ * -- time domain input from user
+ * -- choose number of rounds appropriate to workout duration
+ * -- choose number of movements
+ * -- construct movement type array of M, W or G
+ * -- use weighted percentage to choose reps per movement based on sec per rep
+ * -- choose random movements
+ * -- choose number of rounds appropriate to duration
+ * -- divide time domain (in sec) into rounds (in sec)
+ * -- account for rest time
+ * -- choose reps per movement based on sec per rep
+ * -- round down to make pretty number
+ */
 
 const restByIntensityMap = (seconds) => ({
   [INTENSITY.Easy]: Math.round(seconds * 0.4),
@@ -23,12 +37,12 @@ const toRoundsForTime = (args) => {
     (secondsPerRound - timeToDeduct) / numberOfMovements
   );
 
-  const repsWithLoadOrHeight = toRepsWithLoadOrHeight(
+  const repsWithLoadOrHeight = toRepsWithLoadOrHeight({
     intensity,
     movements,
+    timeDomainInMinutes,
     secondsPerMovementPerRd,
-    timeDomainInMinutes
-  );
+  });
 
   return {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),

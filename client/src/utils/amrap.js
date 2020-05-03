@@ -2,7 +2,6 @@ import { toFormattedWorkout } from "./format";
 import { toRandomIntensity } from "./intensity";
 import { toMovementsArray, toRandomNumberOfMovements } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
-import { toRounds } from "./rounds";
 import { toSecondsPerRound } from "./time";
 import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
 
@@ -27,12 +26,12 @@ const toAmrap = (args) => {
   const secondsPerMovementPerRd = Math.round(
     secondsPerRound / numberOfMovements
   );
-  const repsWithLoadOrHeight = toRepsWithLoadOrHeight(
+  const repsWithLoadOrHeight = toRepsWithLoadOrHeight({
     intensity,
     movements,
+    timeDomainInMinutes,
     secondsPerMovementPerRd,
-    timeDomainInMinutes
-  );
+  });
 
   return {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),

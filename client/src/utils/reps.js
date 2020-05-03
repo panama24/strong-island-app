@@ -4,16 +4,6 @@ import { isBoxJumps, isMonostructural, isWeightlifting } from "./movements";
 import { getUnitsByDuration } from "./units";
 
 const toReps = (totalSeconds, intensity, movement) => {
-  if (isWeightlifting(movement)) {
-    return toIntensifiedReps(totalSeconds, intensity, movement);
-  }
-  return toIntensifiedReps(totalSeconds, intensity, movement);
-};
-
-const toIntensifiedSecondsPerRep = (intensity, movement) =>
-  intensityToSecondsPerRepToAddMap[intensity] + movement.secondsPerRep;
-
-const toIntensifiedReps = (totalSeconds, intensity, movement) => {
   const intensifiedSecondsPerRep = toIntensifiedSecondsPerRep(
     intensity,
     movement
@@ -21,14 +11,20 @@ const toIntensifiedReps = (totalSeconds, intensity, movement) => {
   return Math.round(totalSeconds / intensifiedSecondsPerRep);
 };
 
-const toRepsWithLoadOrHeight = (
+const toIntensifiedSecondsPerRep = (intensity, movement) =>
+  intensityToSecondsPerRepToAddMap[intensity] + movement.secondsPerRep;
+
+const toRepsWithLoadOrHeight = ({
+  assignedReps,
   intensity,
   movements,
+  timeDomainInMinutes,
   secondsPerMovementPerRd,
-  timeDomainInMinutes
-) =>
-  movements.map((movement) => {
-    const reps = toReps(secondsPerMovementPerRd, intensity, movement);
+}) =>
+  movements.map((movement, i) => {
+    const reps = assignedReps
+      ? assignedReps[i]
+      : toReps(secondsPerMovementPerRd, intensity, movement);
     if (isMonostructural(movement)) {
       return toMonostructuralReps(timeDomainInMinutes, reps, movement);
     }

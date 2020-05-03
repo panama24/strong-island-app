@@ -1,21 +1,6 @@
 import { getRandomEl, toRandomFromRange } from "./random";
 import { getLowRange, getMidRange, getHighRange } from "./range";
 
-/**
- * ROUNDS
- * -- time domain input from user
- * -- choose number of rounds appropriate to workout duration
- * -- choose number of movements
- * -- construct movement type array of M, W or G
- * -- use weighted percentage to choose reps per movement based on sec per rep
- * -- choose random movements
- * -- choose number of rounds appropriate to duration
- * -- divide time domain (in sec) into rounds (in sec)
- * -- account for rest time
- * -- choose reps per movement based on sec per rep
- * -- round down to make pretty number
- */
-
 // [low, mid, high] number of rounds
 const weights = [60, 30, 10];
 
