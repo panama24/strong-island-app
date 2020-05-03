@@ -26,7 +26,7 @@ const toRepsWithLoadOrHeight = ({
       ? assignedReps[i]
       : toReps(secondsPerMovementPerRd, intensity, movement);
     if (isMonostructural(movement)) {
-      return toMonostructuralReps(timeDomainInMinutes, reps, movement);
+      return toMonostructuralReps(timeDomainInMinutes, movement);
     }
     if (isBoxJumps(movement)) {
       return toBoxJumpReps(reps, intensity, movement);
@@ -46,9 +46,10 @@ const toStandardReps = (reps, intensity, movement) => {
   };
 };
 
-const toMonostructuralReps = (timeDomainInMinutes, reps, movement) => {
+const toMonostructuralReps = (timeDomainInMinutes, movement) => {
   // if double-unders
   if (!movement.units) {
+    const reps = movement.secondsPerRep;
     return {
       name: movement.displayName,
       reps,
