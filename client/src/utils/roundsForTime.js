@@ -1,9 +1,11 @@
 import { toFormattedWorkout } from "./format";
-import { toRandomIntensity, INTENSITY } from "./intensity";
+import { weightedIntensity } from "./intensity";
+import { INTENSITY } from "./intensity";
 import { toRandomNumberOfMovements, toMovementsArray } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
 import { toSecondsPerRound } from "./time";
-import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
+import { SCORE_TYPE } from "../types";
+import { toRandomWeighted } from "./weighted";
 
 /**
  * ROUNDS
@@ -20,27 +22,27 @@ import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
  * -- round down to make pretty number
  */
 
-const restByIntensityMap = (seconds) => ({
+const restByIntensity = (seconds) => ({
   [INTENSITY.Easy]: Math.round(seconds * 0.4),
   [INTENSITY.Moderate]: Math.round(seconds * 0.3),
   [INTENSITY.Hard]: Math.round(seconds * 0.2),
 });
 
 const toRoundsForTime = (args) => {
-  const { rounds, timeDomainInMinutes } = args;
-  const intensity = toRandomIntensity();
-  const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
+  const { minutes, rounds, type } = args;
+  const intensity = toRandomWeighted(weightedIntensity);
+  const numberOfMovements = toRandomNumberOfMovements(minutes);
   const movements = toMovementsArray(numberOfMovements);
-  const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
-  const timeToDeduct = restByIntensityMap(secondsPerRound)[intensity];
+  const secondsPerRound = toSecondsPerRound(minutes, rounds);
+  const secondsDeducted = restByIntensity(secondsPerRound)[intensity];
   const secondsPerMovementPerRd = Math.round(
-    (secondsPerRound - timeToDeduct) / numberOfMovements
+    (secondsPerRound - secondsDeducted) / numberOfMovements
   );
 
   const repsWithLoadOrHeight = toRepsWithLoadOrHeight({
     intensity,
     movements,
-    timeDomainInMinutes,
+    minutes,
     secondsPerMovementPerRd,
   });
 
@@ -48,18 +50,17 @@ const toRoundsForTime = (args) => {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
     intensity,
     movements,
-    name: "Rounds for Time",
-    rounds,
     reps: repsWithLoadOrHeight,
-    scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
+    rounds,
+    scoreStandard: toScoreStandard(rounds, minutes),
     scoreType: SCORE_TYPE.Task,
-    style: WORKOUT_STYLE.Amrap,
-    time: timeDomainInMinutes,
-    timeCap: timeDomainInMinutes,
+    time: minutes,
+    timeCap: minutes,
+    type,
   };
 };
 
-const toScoreStandard = (rounds, timeDomainInMinutes) =>
-  `${rounds} Rounds For Time *${timeDomainInMinutes} minute time cap`;
+const toScoreStandard = (rounds, minutes) =>
+  `${rounds} Rounds For Time *${minutes} minute time cap`;
 
 export { toRoundsForTime };

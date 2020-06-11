@@ -14,10 +14,9 @@ const SCORE_TYPE = {
   Task: "task",
 };
 
-const WORKOUT_STYLE = {
+const WORKOUT_TYPES = {
   Amrap: "amrap",
   Rounds: "rounds",
-  Interval: "interval",
 };
 
 const LEVELS = {
@@ -33,4 +32,4 @@ const UNITS = {
   Meters: "meters",
 };
 
-export { DURATION, LEVELS, MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_STYLE, UNITS };
+export { DURATION, LEVELS, MOVEMENT_TYPE, SCORE_TYPE, WORKOUT_TYPES, UNITS };

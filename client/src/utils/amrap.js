@@ -1,9 +1,10 @@
 import { toFormattedWorkout } from "./format";
-import { toRandomIntensity } from "./intensity";
+import { weightedIntensity } from "./intensity";
 import { toMovementsArray, toRandomNumberOfMovements } from "./movements";
 import { toRepsWithLoadOrHeight } from "./reps";
 import { toSecondsPerRound } from "./time";
-import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
+import { SCORE_TYPE } from "../types";
+import { toRandomWeighted } from "./weighted";
 
 /**
  * AMRAP
@@ -18,18 +19,18 @@ import { SCORE_TYPE, WORKOUT_STYLE } from "../types";
  */
 
 const toAmrap = (args) => {
-  const { rounds, timeDomainInMinutes } = args;
-  const intensity = toRandomIntensity();
-  const numberOfMovements = toRandomNumberOfMovements(timeDomainInMinutes);
+  const { minutes, rounds, type } = args;
+  const intensity = toRandomWeighted(weightedIntensity);
+  const numberOfMovements = toRandomNumberOfMovements(minutes);
   const movements = toMovementsArray(numberOfMovements);
-  const secondsPerRound = toSecondsPerRound(timeDomainInMinutes, rounds);
+  const secondsPerRound = toSecondsPerRound(minutes, rounds);
   const secondsPerMovementPerRd = Math.round(
     secondsPerRound / numberOfMovements
   );
   const repsWithLoadOrHeight = toRepsWithLoadOrHeight({
     intensity,
     movements,
-    timeDomainInMinutes,
+    minutes,
     secondsPerMovementPerRd,
   });
 
@@ -37,18 +38,17 @@ const toAmrap = (args) => {
     formattedWorkout: toFormattedWorkout(repsWithLoadOrHeight),
     intensity,
     movements,
-    name: "AMRAP",
-    rounds,
     reps: repsWithLoadOrHeight,
-    scoreStandard: toScoreStandard(rounds, timeDomainInMinutes),
+    rounds,
+    scoreStandard: toScoreStandard(rounds, minutes),
     scoreType: SCORE_TYPE.Time,
-    style: WORKOUT_STYLE.Amrap,
-    time: timeDomainInMinutes,
-    timeCap: timeDomainInMinutes,
+    time: minutes,
+    timeCap: minutes,
+    type,
   };
 };
 
-const toScoreStandard = (rounds, timeDomainInMinutes) =>
-  `Complete ${rounds} rounds in ${timeDomainInMinutes} minutes.`;
+const toScoreStandard = (rounds, minutes) =>
+  `Complete ${rounds} rounds in ${minutes} minutes.`;
 
 export { toAmrap };

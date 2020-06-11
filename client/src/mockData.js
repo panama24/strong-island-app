@@ -2,7 +2,7 @@ import {
   DURATION,
   MOVEMENT_TYPE,
   SCORE_TYPE,
-  WORKOUT_STYLE,
+  WORKOUT_TYPES,
   UNITS,
 } from "./types";
 
@@ -647,7 +647,6 @@ export const workout = {
   scoreType: SCORE_TYPE.Task,
   timeCap: 120,
   title: "Some Cool WOD",
-  style: WORKOUT_STYLE.Interval,
   movements: [
     {
       id: "23",

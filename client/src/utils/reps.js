@@ -1,6 +1,6 @@
 import { toHeight, toLoads } from "./format";
 import { intensityToSecondsPerRepToAddMap } from "./intensity";
-import { isBoxJumps, isMonostructural, isWeightlifting } from "./movements";
+import { isBoxJumps, isMonostructural } from "./movements";
 import { getUnitsByDuration } from "./units";
 
 const toReps = (totalSeconds, intensity, movement) => {
@@ -15,18 +15,16 @@ const toIntensifiedSecondsPerRep = (intensity, movement) =>
   intensityToSecondsPerRepToAddMap[intensity] + movement.secondsPerRep;
 
 const toRepsWithLoadOrHeight = ({
-  assignedReps,
   intensity,
   movements,
-  timeDomainInMinutes,
+  minutes,
   secondsPerMovementPerRd,
 }) =>
   movements.map((movement, i) => {
-    const reps = assignedReps
-      ? assignedReps[i]
-      : toReps(secondsPerMovementPerRd, intensity, movement);
+    const reps = toReps(secondsPerMovementPerRd, intensity, movement);
+
     if (isMonostructural(movement)) {
-      return toMonostructuralReps(timeDomainInMinutes, movement);
+      return toMonostructuralReps(minutes, movement, secondsPerMovementPerRd);
     }
     if (isBoxJumps(movement)) {
       return toBoxJumpReps(reps, intensity, movement);
@@ -46,10 +44,11 @@ const toStandardReps = (reps, intensity, movement) => {
   };
 };
 
-const toMonostructuralReps = (timeDomainInMinutes, movement) => {
+const toMonostructuralReps = (minutes, movement, secondsPerMovementPerRd) => {
   // if double-unders
   if (!movement.units) {
-    const reps = movement.secondsPerRep;
+    const reps = movement.secondsPerRep * secondsPerMovementPerRd;
+
     return {
       name: movement.displayName,
       reps,
@@ -57,10 +56,7 @@ const toMonostructuralReps = (timeDomainInMinutes, movement) => {
     };
   }
 
-  const { units, formattedUnit } = getUnitsByDuration(
-    movement,
-    timeDomainInMinutes
-  );
+  const { units, formattedUnit } = getUnitsByDuration(movement, minutes);
 
   return {
     name: movement.displayName,

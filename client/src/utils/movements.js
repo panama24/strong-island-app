@@ -79,6 +79,8 @@ const toUniqueWithThreshold = (types, threshold) => {
         isMonostructural(m) ? m : withinThreshold(m, threshold, 3)
       )
     );
+
+    console.log("movement:", movement);
     while (movementSet.has(movement.name)) {
       movement = getRandomEl(
         movementTypeMap[t].filter((m) =>

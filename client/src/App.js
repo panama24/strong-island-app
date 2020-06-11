@@ -4,12 +4,14 @@ import { useAuth } from "./context/auth-context";
 import { AuthenticatedApp } from "./AuthenticatedApp";
 import { UnauthenticatedApp } from "./UnauthenticatedApp";
 
-import { toAmrap } from "./utils/amrap";
+import { toGenerateWorkout } from "./utils/generateWorkout";
 
 const App = () => {
   const { user } = useAuth();
-  const timeDomain = 15;
-  console.log(toAmrap(timeDomain));
+  const timeDomain = 40;
+  React.useEffect(() => {
+    console.log(toGenerateWorkout(timeDomain));
+  }, []);
   return (
     <React.Suspense fallback={<Loader />}>
       {user ? <AuthenticatedApp /> : <UnauthenticatedApp />}

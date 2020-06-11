@@ -1,37 +1,37 @@
 import { getRandomEl, toRandomFromRange } from "./random";
 import { getLowRange, getMidRange, getHighRange } from "./range";
 
-// [low, mid, high] number of rounds
-const weights = [60, 30, 10];
+const WEIGHTS_BY_RANGE = [60, 30, 10];
 
 // ranges = [low, mid, high];
 const toWeightedRoundsArray = (ranges) =>
   ranges.reduce((acc, curr, i) => {
-    return acc.concat(Array(weights[i]).fill(curr));
+    return acc.concat(Array(WEIGHTS_BY_RANGE[i]).fill(curr));
   }, []);
 
-const toRangesArray = (mins) => {
-  return [getLowRange(mins), getMidRange(mins), getHighRange(mins)];
-};
+const toRanges = (minutes) => [
+  // [startRange, endRange]
+  getLowRange(minutes),
+  getMidRange(minutes),
+  getHighRange(minutes),
+];
 
-const toRandomRangeFromRanges = (rangesArray) => {
-  const [lowRange, midRange, highRange] = rangesArray;
+const toRandomRanges = (ranges) => {
+  const [low, mid, high] = ranges;
+  // choose random number from each range
   return [
-    toRandomFromRange(lowRange),
-    toRandomFromRange(midRange),
-    toRandomFromRange(highRange),
+    toRandomFromRange(low),
+    toRandomFromRange(mid),
+    toRandomFromRange(high),
   ];
 };
 
-const toRounds = (mins) => {
-  // an array of ranges [start, end] for each range
-  const rangesArray = toRangesArray(mins);
-  // randomly choose a number from each range
-  const ranges = toRandomRangeFromRanges(rangesArray);
-  // construct weighted array
-  const weightedArray = toWeightedRoundsArray(ranges);
-  // randomly choose number (rounds) from weighted array
-  return getRandomEl(weightedArray);
+const toRounds = (minutes) => {
+  const ranges = toRanges(minutes);
+  const randomRanges = toRandomRanges(ranges);
+  const weightedRounds = toWeightedRoundsArray(randomRanges);
+
+  return getRandomEl(weightedRounds);
 };
 
 export { toRounds };
